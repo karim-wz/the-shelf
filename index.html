@@ -1,0 +1,1948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#0a0908">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="The Shelf">
+<title>The Shelf — Your Reading Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   CSS CUSTOM PROPERTIES — THEME ENGINE
+═══════════════════════════════════════════════ */
+:root {
+  /* dark theme defaults */
+  --bg:        #0a0908;
+  --bg2:       #131110;
+  --bg3:       #1a1816;
+  --bg4:       #232018;
+  --bg5:       #2c2922;
+  --line:      rgba(255,255,255,0.06);
+  --line2:     rgba(255,255,255,0.11);
+  --line3:     rgba(255,255,255,0.18);
+  --text:      #ede8df;
+  --text2:     #a09a90;
+  --text3:     #6b6560;
+  --text4:     #3d3a36;
+  --accent:    #c8a45a;
+  --accent2:   #e6c97c;
+  --accent-d:  rgba(200,164,90,0.12);
+  --green:     #5c9e7a;
+  --green-d:   rgba(92,158,122,0.12);
+  --blue:      #7a9fc8;
+  --blue-d:    rgba(122,159,200,0.12);
+  --red:       #c87a7a;
+  --red-d:     rgba(200,122,122,0.12);
+  --radius:    8px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --shadow:    0 4px 24px rgba(0,0,0,0.4);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+
+  /* typography — overridden by settings */
+  --font-ui:   'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-size: 14px;
+  --line-h:    1.65;
+}
+
+/* LIGHT THEME */
+[data-theme="light"] {
+  --bg:    #faf7f2;
+  --bg2:   #f4f0e8;
+  --bg3:   #ede8dd;
+  --bg4:   #e4ddd0;
+  --bg5:   #d8d0c0;
+  --line:  rgba(0,0,0,0.07);
+  --line2: rgba(0,0,0,0.12);
+  --line3: rgba(0,0,0,0.2);
+  --text:  #1a1714;
+  --text2: #5a5650;
+  --text3: #8a857e;
+  --text4: #b8b3aa;
+  --shadow:    0 4px 24px rgba(0,0,0,0.08);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* SEPIA THEME */
+[data-theme="sepia"] {
+  --bg:    #f5ede0;
+  --bg2:   #ede4d5;
+  --bg3:   #e4d9c8;
+  --bg4:   #d9cdb8;
+  --bg5:   #cec0a8;
+  --line:  rgba(80,60,20,0.1);
+  --line2: rgba(80,60,20,0.18);
+  --line3: rgba(80,60,20,0.28);
+  --text:  #2d2318;
+  --text2: #6b5840;
+  --text3: #9a8060;
+  --text4: #c4a880;
+  --accent: #b07830;
+  --accent2: #d49840;
+  --shadow:    0 4px 24px rgba(100,60,0,0.1);
+  --shadow-sm: 0 2px 8px rgba(100,60,0,0.07);
+}
+
+/* FONT OPTIONS */
+[data-font="merriweather"] { --font-body: 'Merriweather', serif; }
+[data-font="lora"]         { --font-body: 'Lora', serif; }
+[data-font="serif4"]       { --font-body: 'Source Serif 4', serif; }
+[data-font="dmsans"]       { --font-body: 'DM Sans', sans-serif; }
+[data-font="crimson"]      { --font-body: 'Crimson Pro', serif; }
+[data-font="inter"]        { --font-body: 'Inter', system-ui, sans-serif; }
+
+/* FONT SIZE OPTIONS */
+[data-size="sm"]  { --font-size: 12px; }
+[data-size="md"]  { --font-size: 14px; }
+[data-size="lg"]  { --font-size: 16px; }
+[data-size="xl"]  { --font-size: 18px; }
+
+/* ═══════════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════════ */
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; -webkit-tap-highlight-color:transparent; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--font-size);
+  line-height: var(--line-h);
+  min-height: 100vh;
+  transition: background .25s, color .25s;
+  overflow-x: hidden;
+}
+button,input,textarea,select { font-family: var(--font-ui); }
+
+/* noise overlay */
+body::after {
+  content:'';
+  position:fixed; inset:0;
+  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:9999; opacity:.35;
+}
+
+/* ═══════════════════════════════════════════════
+   APP SHELL
+═══════════════════════════════════════════════ */
+#app { display:flex; flex-direction:column; min-height:100vh; }
+
+/* ── TOP NAV ── */
+.topnav {
+  position:sticky; top:0; z-index:100;
+  background:var(--bg); border-bottom:1px solid var(--line);
+  display:flex; align-items:center; gap:0;
+  padding:0 20px; height:56px;
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+}
+.nav-logo {
+  font-family:'Lora', serif;
+  font-size:20px; font-weight:400; font-style:italic;
+  color:var(--accent); letter-spacing:-.01em;
+  margin-right:auto; cursor:pointer; flex-shrink:0;
+}
+.nav-logo span { color:var(--text3); font-size:13px; font-style:normal; font-family:var(--font-ui); margin-left:4px; vertical-align:middle; font-weight:400; }
+.nav-tabs { display:flex; gap:2px; }
+.nav-tab {
+  font-family:var(--font-ui); font-size:12px; font-weight:500;
+  color:var(--text3); background:none; border:none;
+  padding:6px 12px; border-radius:var(--radius); cursor:pointer;
+  transition:all .15s; letter-spacing:.01em; white-space:nowrap;
+}
+.nav-tab:hover { color:var(--text); background:var(--bg3); }
+.nav-tab.active { color:var(--accent); background:var(--accent-d); }
+.nav-right { display:flex; align-items:center; gap:8px; margin-left:16px; }
+.nav-avatar {
+  width:32px; height:32px; border-radius:50%;
+  background:var(--accent-d); border:1.5px solid var(--accent);
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:600; color:var(--accent);
+  cursor:pointer; transition:all .15s; font-family:var(--font-ui);
+  flex-shrink:0;
+}
+.nav-avatar:hover { background:var(--accent); color:var(--bg); }
+.icon-btn {
+  width:32px; height:32px; border-radius:var(--radius);
+  background:none; border:none; color:var(--text3);
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  font-size:15px; transition:all .15s;
+}
+.icon-btn:hover { color:var(--text); background:var(--bg3); }
+
+/* ── MAIN CONTENT ── */
+.view { display:none; flex:1; }
+.view.active { display:block; }
+
+/* ═══════════════════════════════════════════════
+   AUTH SCREEN
+═══════════════════════════════════════════════ */
+#view-auth {
+  display:flex; align-items:center; justify-content:center;
+  min-height:100vh; padding:24px;
+}
+.auth-card {
+  background:var(--bg2); border:1px solid var(--line2);
+  border-radius:var(--radius-xl); padding:40px 36px;
+  width:100%; max-width:420px; box-shadow:var(--shadow);
+}
+.auth-logo {
+  font-family:'Lora', serif; font-size:32px; font-weight:400;
+  font-style:italic; color:var(--accent); text-align:center;
+  margin-bottom:6px;
+}
+.auth-tagline { text-align:center; font-size:12px; color:var(--text3); margin-bottom:32px; }
+.auth-title { font-size:18px; font-weight:600; margin-bottom:6px; font-family:var(--font-ui); }
+.auth-sub { font-size:12px; color:var(--text3); margin-bottom:24px; }
+.auth-field { margin-bottom:14px; }
+.auth-label { font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--text3); display:block; margin-bottom:5px; font-family:var(--font-ui); }
+.auth-input {
+  width:100%; background:var(--bg3); border:1px solid var(--line2);
+  border-radius:var(--radius); color:var(--text); font-size:13px;
+  padding:10px 12px; outline:none; transition:border-color .15s;
+  font-family:var(--font-ui);
+}
+.auth-input:focus { border-color:var(--accent); }
+.auth-input::placeholder { color:var(--text3); }
+.auth-btn {
+  width:100%; background:var(--accent); color:var(--bg);
+  border:none; border-radius:var(--radius); font-weight:700;
+  font-size:13px; padding:12px; cursor:pointer;
+  transition:background .15s; margin-top:4px; font-family:var(--font-ui);
+  letter-spacing:.02em;
+}
+.auth-btn:hover { background:var(--accent2); }
+.auth-divider { display:flex; align-items:center; gap:12px; margin:18px 0; color:var(--text3); font-size:11px; }
+.auth-divider::before,.auth-divider::after { content:''; flex:1; height:1px; background:var(--line2); }
+.social-btn {
+  width:100%; background:var(--bg3); border:1px solid var(--line2);
+  border-radius:var(--radius); color:var(--text); font-size:13px;
+  font-weight:500; padding:11px 12px; cursor:pointer;
+  transition:all .15s; display:flex; align-items:center;
+  justify-content:center; gap:10px; margin-bottom:8px; font-family:var(--font-ui);
+}
+.social-btn:hover { background:var(--bg4); border-color:var(--line3); }
+.auth-switch { text-align:center; font-size:12px; color:var(--text3); margin-top:20px; }
+.auth-switch a { color:var(--accent); cursor:pointer; text-decoration:none; font-weight:500; }
+.auth-switch a:hover { text-decoration:underline; }
+.auth-error { background:var(--red-d); border:1px solid rgba(200,122,122,.3); border-radius:var(--radius); padding:10px 12px; font-size:12px; color:var(--red); margin-bottom:14px; display:none; }
+
+/* ═══════════════════════════════════════════════
+   CURRENTLY READING BANNER
+═══════════════════════════════════════════════ */
+.currently-reading {
+  background:var(--bg2); border-bottom:1px solid var(--line);
+  padding:14px 24px; display:none;
+}
+.currently-reading.has-books { display:block; }
+.cr-label { font-size:9px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); margin-bottom:10px; font-family:var(--font-ui); }
+.cr-books { display:flex; gap:10px; flex-wrap:wrap; }
+.cr-book {
+  background:var(--bg3); border:1px solid var(--line2);
+  border-radius:var(--radius); padding:8px 14px;
+  display:flex; align-items:center; gap:10px; cursor:pointer;
+  transition:all .15s; max-width:280px;
+}
+.cr-book:hover { background:var(--bg4); border-color:var(--line3); }
+.cr-dot { width:7px; height:7px; border-radius:50%; background:var(--blue); flex-shrink:0; animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.6;transform:scale(.85)} }
+.cr-book-title { font-size:12px; font-weight:500; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cr-book-author { font-size:10px; color:var(--text3); white-space:nowrap; }
+
+/* ═══════════════════════════════════════════════
+   MAIN SHELL (sidebar + content)
+═══════════════════════════════════════════════ */
+.app-body { display:flex; flex:1; max-width:1100px; margin:0 auto; width:100%; padding:0 20px 60px; gap:24px; padding-top:24px; }
+
+/* ═══════════════════════════════════════════════
+   STATS ROW
+═══════════════════════════════════════════════ */
+.stats-row {
+  display:grid; grid-template-columns:repeat(5,1fr);
+  gap:1px; background:var(--line); border:1px solid var(--line);
+  border-radius:var(--radius-lg); overflow:hidden; margin-bottom:20px;
+}
+.stat-box { background:var(--bg2); padding:14px 12px; text-align:center; }
+.stat-n { font-size:24px; font-weight:700; color:var(--accent); display:block; letter-spacing:-.02em; font-family:var(--font-ui); line-height:1; }
+.stat-l { font-size:9px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--text3); margin-top:3px; font-family:var(--font-ui); }
+
+/* ═══════════════════════════════════════════════
+   GOALS
+═══════════════════════════════════════════════ */
+.goals-bar {
+  background:var(--bg2); border:1px solid var(--line);
+  border-radius:var(--radius-lg); padding:14px 18px;
+  margin-bottom:20px; display:flex; align-items:center; gap:16px;
+}
+.goals-bar.hidden { display:none; }
+.goal-info { flex:1 }
+.goal-title { font-size:12px; font-weight:600; color:var(--text); font-family:var(--font-ui); }
+.goal-sub { font-size:11px; color:var(--text3); margin-top:1px; }
+.goal-track { flex:2; }
+.goal-progress {
+  height:6px; background:var(--bg4); border-radius:4px;
+  overflow:hidden; margin-bottom:4px;
+}
+.goal-fill { height:100%; background:var(--green); border-radius:4px; transition:width .6s ease; }
+.goal-pct { font-size:10px; color:var(--text3); font-family:var(--font-ui); }
+.goal-edit-btn {
+  font-size:11px; color:var(--text3); background:none;
+  border:1px solid var(--line2); border-radius:var(--radius);
+  padding:5px 10px; cursor:pointer; transition:all .15s;
+  font-family:var(--font-ui); white-space:nowrap; font-weight:500;
+}
+.goal-edit-btn:hover { color:var(--accent); border-color:rgba(200,164,90,.4); background:var(--accent-d); }
+
+/* ═══════════════════════════════════════════════
+   TOOLBAR (search + filters)
+═══════════════════════════════════════════════ */
+.toolbar { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; align-items:center; }
+.search-wrap { position:relative; flex:1; min-width:160px; }
+.search-ic { position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--text3); font-size:13px; pointer-events:none; }
+.search-in {
+  width:100%; background:var(--bg2); border:1px solid var(--line2);
+  border-radius:var(--radius); color:var(--text); font-size:12px;
+  padding:8px 10px 8px 30px; outline:none; transition:border-color .15s;
+  font-family:var(--font-ui);
+}
+.search-in:focus { border-color:rgba(200,164,90,.45); }
+.search-in::placeholder { color:var(--text3); }
+.filter-pill {
+  font-size:11px; font-weight:500; color:var(--text3);
+  background:var(--bg2); border:1px solid var(--line);
+  border-radius:20px; padding:5px 13px; cursor:pointer;
+  transition:all .15s; white-space:nowrap; font-family:var(--font-ui);
+}
+.filter-pill:hover { color:var(--text); background:var(--bg3); }
+.filter-pill.on { color:var(--bg); background:var(--accent); border-color:var(--accent); font-weight:600; }
+
+/* ═══════════════════════════════════════════════
+   CATEGORY ACCORDION
+═══════════════════════════════════════════════ */
+.cat { margin-bottom:3px; }
+.cat-head {
+  display:flex; align-items:center; gap:12px;
+  padding:13px 16px; background:var(--bg2);
+  border:1px solid var(--line); border-radius:var(--radius);
+  cursor:pointer; user-select:none; transition:background .12s,border-color .12s;
+}
+.cat-head:hover { background:var(--bg3); border-color:var(--line2); }
+.cat.open .cat-head { border-radius:var(--radius) var(--radius) 0 0; border-color:rgba(200,164,90,.2); border-bottom-color:var(--line); }
+.cat-icon { font-size:14px; opacity:.65; flex-shrink:0; width:18px; text-align:center; }
+.cat-info { flex:1; }
+.cat-name { font-size:14px; font-weight:600; color:var(--text); font-family:var(--font-ui); }
+.cat-desc { font-size:11px; color:var(--text3); margin-top:1px; }
+.cat-meta { display:flex; align-items:center; gap:10px; flex-shrink:0; }
+.cat-pct { font-size:11px; color:var(--text3); font-variant-numeric:tabular-nums; font-family:var(--font-ui); }
+.cat-pct.lit { color:var(--green); }
+.minibar { width:36px; height:3px; background:var(--bg4); border-radius:2px; overflow:hidden; }
+.minibar-fill { height:100%; background:var(--green); border-radius:2px; transition:width .5s; }
+.chev { width:14px; height:14px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.chev svg { transition:transform .28s cubic-bezier(.4,0,.2,1); stroke:var(--text3); }
+.cat.open .chev svg { transform:rotate(90deg); stroke:var(--accent); }
+
+.cat-body {
+  max-height:0; overflow:hidden; transition:max-height .4s cubic-bezier(.4,0,.2,1);
+  border:1px solid rgba(200,164,90,.2); border-top:none;
+  border-radius:0 0 var(--radius) var(--radius);
+}
+
+/* ── SUBCAT ── */
+.subcat { border-bottom:1px solid var(--line); }
+.subcat:last-child { border-bottom:none; }
+.subcat-head {
+  display:flex; align-items:center; gap:8px;
+  padding:8px 16px 8px 46px; background:rgba(255,255,255,.015);
+  cursor:pointer; user-select:none; transition:background .12s;
+  border-bottom:1px solid transparent;
+}
+[data-theme="light"] .subcat-head, [data-theme="sepia"] .subcat-head {
+  background:rgba(0,0,0,.015);
+}
+.subcat-head:hover { background:rgba(255,255,255,.03); }
+[data-theme="light"] .subcat-head:hover, [data-theme="sepia"] .subcat-head:hover { background:rgba(0,0,0,.03); }
+.subcat.open .subcat-head { border-bottom-color:var(--line); }
+.subcat-name { font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--text3); flex:1; font-family:var(--font-ui); }
+.subcat.open .subcat-name { color:var(--accent); }
+.subcat-count { font-size:10px; color:var(--text3); font-family:var(--font-ui); }
+.subcat-chev { flex-shrink:0; }
+.subcat-chev svg { transition:transform .22s; stroke:var(--text3); }
+.subcat.open .subcat-chev svg { transform:rotate(90deg); stroke:var(--accent); }
+.subcat-body { max-height:0; overflow:hidden; transition:max-height .32s cubic-bezier(.4,0,.2,1); }
+
+/* ── BOOK ROW ── */
+.book-row {
+  display:grid; grid-template-columns:1fr auto;
+  border-bottom:1px solid var(--line);
+  background:var(--bg2); transition:background .1s; align-items:stretch;
+}
+.book-row:last-child { border-bottom:none; }
+.book-row:hover { background:var(--bg3); }
+.book-row.s-done { background:rgba(92,158,122,.025); }
+.book-row.s-reading { background:rgba(122,159,200,.025); }
+.book-row.hidden { display:none; }
+
+.book-main { padding:11px 14px 11px 52px; min-width:0; }
+.book-top { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+.book-title { font-size:13px; font-weight:600; color:var(--text); line-height:1.3; font-family:var(--font-ui); }
+.book-author { font-size:11px; color:var(--text3); font-family:var(--font-ui); }
+.book-chips { display:flex; gap:4px; margin-top:4px; flex-wrap:wrap; align-items:center; }
+.chip {
+  font-size:9px; font-weight:600; letter-spacing:.06em;
+  padding:2px 6px; border-radius:4px; border:1px solid; font-family:var(--font-ui);
+}
+.chip-meta { color:var(--text3); border-color:var(--line); background:transparent; }
+.chip-done { color:var(--green); border-color:rgba(92,158,122,.35); background:var(--green-d); }
+.chip-reading { color:var(--blue); border-color:rgba(122,159,200,.35); background:var(--blue-d); }
+.book-dates { font-size:10px; color:var(--text3); margin-top:3px; font-family:var(--font-ui); }
+.book-stars { display:flex; gap:1px; margin-top:3px; }
+.si { font-size:11px; }
+.si-f { color:var(--accent); }
+.si-h { color:var(--accent); opacity:.55; }
+.si-e { color:var(--text3); opacity:.25; }
+.book-snip { font-size:11px; color:var(--text2); margin-top:4px; line-height:1.5; border-left:2px solid var(--accent-d); padding-left:9px; font-style:italic; }
+.book-note { font-size:11px; color:var(--text3); margin-top:5px; line-height:1.55; }
+
+.book-actions { padding:11px 14px 11px 8px; display:flex; flex-direction:column; align-items:flex-end; gap:5px; flex-shrink:0; }
+.tbtn {
+  font-size:10px; font-weight:600; padding:5px 10px;
+  border-radius:var(--radius); cursor:pointer; border:1px solid;
+  transition:all .15s; white-space:nowrap; font-family:var(--font-ui);
+}
+.tbtn-idle { color:var(--text3); background:transparent; border-color:var(--line2); }
+.tbtn-idle:hover { color:var(--blue); border-color:var(--blue); background:var(--blue-d); }
+.tbtn-reading { color:var(--blue); background:var(--blue-d); border-color:rgba(122,159,200,.4); }
+.tbtn-reading:hover { color:var(--green); border-color:var(--green); background:var(--green-d); }
+.tbtn-done { color:var(--green); background:var(--green-d); border-color:rgba(92,158,122,.4); }
+.tbtn-done:hover { color:var(--text3); background:transparent; border-color:var(--line2); }
+.jbtn {
+  font-size:10px; font-weight:500; color:var(--text3);
+  background:none; border:1px solid var(--line); border-radius:var(--radius);
+  padding:4px 9px; cursor:pointer; transition:all .15s; font-family:var(--font-ui);
+}
+.jbtn:hover, .jbtn.lit { color:var(--accent); border-color:rgba(200,164,90,.4); background:var(--accent-d); }
+
+/* ═══════════════════════════════════════════════
+   TIMELINE VIEW
+═══════════════════════════════════════════════ */
+#view-timeline .app-body-inner { max-width:680px; }
+.timeline-year { font-size:11px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); margin:28px 0 12px; font-family:var(--font-ui); }
+.timeline-item {
+  display:flex; gap:14px; padding:12px 0;
+  border-bottom:1px solid var(--line); align-items:flex-start;
+}
+.timeline-item:last-child { border-bottom:none; }
+.tl-date { font-size:10px; color:var(--text3); min-width:70px; padding-top:2px; font-family:var(--font-ui); font-variant-numeric:tabular-nums; }
+.tl-dot { width:8px; height:8px; border-radius:50%; background:var(--green); flex-shrink:0; margin-top:5px; }
+.tl-info { flex:1; }
+.tl-title { font-size:13px; font-weight:600; color:var(--text); font-family:var(--font-ui); }
+.tl-author { font-size:11px; color:var(--text3); font-family:var(--font-ui); }
+.tl-stars { display:flex; gap:1px; margin-top:3px; }
+.tl-snip { font-size:11px; color:var(--text2); margin-top:4px; font-style:italic; line-height:1.5; }
+.timeline-empty { text-align:center; padding:60px 20px; color:var(--text3); font-size:13px; }
+
+/* ═══════════════════════════════════════════════
+   WISHLIST VIEW
+═══════════════════════════════════════════════ */
+.wishlist-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+.wishlist-header h2 { font-size:20px; font-weight:700; font-family:var(--font-ui); }
+.add-wish-form {
+  background:var(--bg2); border:1px solid var(--line2);
+  border-radius:var(--radius-lg); padding:18px; margin-bottom:20px; display:none;
+}
+.add-wish-form.open { display:block; }
+.wish-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+.wish-input {
+  width:100%; background:var(--bg3); border:1px solid var(--line2);
+  border-radius:var(--radius); color:var(--text); font-size:12px;
+  padding:9px 12px; outline:none; transition:border-color .15s; font-family:var(--font-ui);
+}
+.wish-input:focus { border-color:var(--accent); }
+.wish-input::placeholder { color:var(--text3); }
+.wish-item {
+  background:var(--bg2); border:1px solid var(--line);
+  border-radius:var(--radius); padding:12px 14px;
+  display:flex; align-items:flex-start; gap:12px; transition:background .12s;
+}
+.wish-item:hover { background:var(--bg3); }
+.wish-item-info { flex:1; min-width:0; }
+.wish-title { font-size:13px; font-weight:600; color:var(--text); font-family:var(--font-ui); }
+.wish-author { font-size:11px; color:var(--text3); font-family:var(--font-ui); }
+.wish-note { font-size:11px; color:var(--text3); margin-top:4px; line-height:1.5; font-style:italic; }
+.wish-remove { color:var(--text3); background:none; border:none; cursor:pointer; font-size:14px; transition:color .15s; flex-shrink:0; padding:2px 4px; }
+.wish-remove:hover { color:var(--red); }
+.wishlist-empty { text-align:center; padding:60px 20px; color:var(--text3); font-size:13px; }
+
+/* ═══════════════════════════════════════════════
+   SETTINGS VIEW
+═══════════════════════════════════════════════ */
+.settings-layout { display:grid; grid-template-columns:200px 1fr; gap:0; background:var(--bg2); border:1px solid var(--line); border-radius:var(--radius-lg); overflow:hidden; }
+.settings-nav { border-right:1px solid var(--line); padding:16px 0; }
+.settings-nav-item {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 18px; font-size:13px; color:var(--text3);
+  cursor:pointer; transition:all .15s; user-select:none; font-family:var(--font-ui); font-weight:500;
+}
+.settings-nav-item:hover { color:var(--text); background:var(--bg3); }
+.settings-nav-item.active { color:var(--accent); background:var(--accent-d); }
+.settings-nav-item span { font-size:14px; }
+.settings-panel { display:none; padding:24px; }
+.settings-panel.active { display:block; }
+.settings-section { margin-bottom:28px; }
+.settings-section:last-child { margin-bottom:0; }
+.settings-h { font-size:13px; font-weight:700; color:var(--text); margin-bottom:4px; font-family:var(--font-ui); letter-spacing:.01em; }
+.settings-sub { font-size:11px; color:var(--text3); margin-bottom:14px; line-height:1.5; }
+.setting-row { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--line); gap:16px; }
+.setting-row:last-child { border-bottom:none; }
+.setting-info { flex:1; }
+.setting-label { font-size:12px; font-weight:500; color:var(--text); font-family:var(--font-ui); }
+.setting-hint { font-size:11px; color:var(--text3); margin-top:1px; }
+.setting-control { flex-shrink:0; }
+
+/* option pills */
+.opt-row { display:flex; gap:6px; flex-wrap:wrap; }
+.opt-pill {
+  font-size:11px; font-weight:500; padding:5px 12px;
+  border-radius:20px; border:1px solid var(--line2);
+  background:var(--bg3); color:var(--text3); cursor:pointer;
+  transition:all .15s; font-family:var(--font-ui);
+}
+.opt-pill:hover { color:var(--text); }
+.opt-pill.on { background:var(--accent); border-color:var(--accent); color:var(--bg); font-weight:700; }
+
+/* toggle switch */
+.toggle { position:relative; width:38px; height:22px; }
+.toggle input { opacity:0; width:0; height:0; }
+.toggle-track {
+  position:absolute; inset:0;
+  background:var(--bg4); border-radius:11px; cursor:pointer;
+  transition:background .2s; border:1px solid var(--line2);
+}
+.toggle input:checked + .toggle-track { background:var(--accent); border-color:var(--accent); }
+.toggle-thumb {
+  position:absolute; top:3px; left:3px;
+  width:14px; height:14px; background:var(--text3);
+  border-radius:50%; pointer-events:none; transition:transform .2s, background .2s;
+}
+.toggle input:checked ~ .toggle-thumb { transform:translateX(16px); background:#fff; }
+
+/* settings input */
+.settings-input {
+  background:var(--bg3); border:1px solid var(--line2);
+  border-radius:var(--radius); color:var(--text); font-size:12px;
+  padding:8px 10px; outline:none; width:100%; transition:border-color .15s; font-family:var(--font-ui);
+}
+.settings-input:focus { border-color:var(--accent); }
+.danger-btn {
+  background:var(--red-d); color:var(--red); border:1px solid rgba(200,122,122,.35);
+  border-radius:var(--radius); padding:8px 16px; font-size:12px;
+  font-weight:600; cursor:pointer; transition:all .15s; font-family:var(--font-ui);
+}
+.danger-btn:hover { background:var(--red); color:#fff; border-color:var(--red); }
+.success-btn {
+  background:var(--green-d); color:var(--green); border:1px solid rgba(92,158,122,.35);
+  border-radius:var(--radius); padding:8px 16px; font-size:12px;
+  font-weight:600; cursor:pointer; transition:all .15s; font-family:var(--font-ui);
+}
+.success-btn:hover { background:var(--green); color:#fff; border-color:var(--green); }
+
+/* font preview */
+.font-preview {
+  padding:10px 14px; background:var(--bg3); border:1px solid var(--line2);
+  border-radius:var(--radius); margin-top:8px; font-size:14px; line-height:1.7;
+  color:var(--text2);
+}
+
+/* ═══════════════════════════════════════════════
+   MODALS
+═══════════════════════════════════════════════ */
+.backdrop {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,.78); z-index:500;
+  align-items:center; justify-content:center; padding:16px;
+}
+.backdrop.open { display:flex; }
+.modal {
+  background:var(--bg2); border:1px solid var(--line2);
+  border-radius:var(--radius-xl); width:100%; max-width:520px;
+  max-height:92vh; overflow-y:auto; position:relative; box-shadow:var(--shadow);
+}
+.modal-head {
+  padding:20px 20px 0; border-bottom:1px solid var(--line);
+  padding-bottom:14px; position:sticky; top:0; background:var(--bg2); z-index:2;
+}
+.modal-title { font-size:16px; font-weight:700; color:var(--text); line-height:1.25; font-family:var(--font-ui); }
+.modal-meta { font-size:11px; color:var(--text3); margin-top:2px; font-family:var(--font-ui); }
+.modal-x {
+  position:absolute; top:14px; right:14px;
+  width:26px; height:26px; display:flex; align-items:center; justify-content:center;
+  background:var(--bg3); border:1px solid var(--line); border-radius:50%;
+  cursor:pointer; color:var(--text3); font-size:12px; transition:all .15s;
+}
+.modal-x:hover { color:var(--text); border-color:var(--line2); }
+.modal-body { padding:18px 20px 22px; }
+.fl { margin-bottom:16px; }
+.fl-label { font-size:9px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--text3); display:block; margin-bottom:6px; font-family:var(--font-ui); }
+.status-row { display:flex; gap:6px; }
+.sopt {
+  flex:1; padding:8px 6px; border-radius:var(--radius);
+  border:1px solid var(--line2); background:var(--bg3);
+  color:var(--text3); font-size:11px; cursor:pointer;
+  text-align:center; transition:all .15s; font-weight:600; font-family:var(--font-ui);
+}
+.sopt:hover { color:var(--text); }
+.sopt.sel-idle { color:var(--text2); background:var(--bg4); border-color:var(--line2); }
+.sopt.sel-reading { color:var(--blue); background:var(--blue-d); border-color:rgba(122,159,200,.4); }
+.sopt.sel-done { color:var(--green); background:var(--green-d); border-color:rgba(92,158,122,.4); }
+.date-2col { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.sub-label { font-size:9px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--text3); display:block; margin-bottom:4px; font-family:var(--font-ui); }
+.m-input {
+  width:100%; background:var(--bg3); border:1px solid var(--line2);
+  border-radius:var(--radius); color:var(--text); font-family:var(--font-ui);
+  font-size:12px; padding:8px 10px; outline:none; transition:border-color .15s;
+}
+.m-input:focus { border-color:var(--accent); }
+.m-input::-webkit-calendar-picker-indicator { filter:invert(.45); cursor:pointer; }
+.star-row { display:flex; gap:3px; }
+.si-inp { font-size:22px; cursor:pointer; color:var(--text3); opacity:.3; user-select:none; line-height:1; transition:transform .1s; }
+.si-inp:hover,.si-inp.lit { color:var(--accent); opacity:1; transform:scale(1.1); }
+.si-inp.hlf { color:var(--accent2); opacity:.6; }
+.star-label { font-size:10px; color:var(--text3); margin-top:5px; font-family:var(--font-ui); }
+.review-ta {
+  width:100%; background:var(--bg3); border:1px solid var(--line2);
+  border-radius:var(--radius); color:var(--text); font-family:var(--font-body);
+  font-size:13px; line-height:1.7; padding:10px 12px; outline:none;
+  resize:vertical; min-height:110px; transition:border-color .15s;
+}
+.review-ta:focus { border-color:var(--accent); }
+.review-ta::placeholder { color:var(--text3); font-style:italic; }
+.save-btn {
+  width:100%; background:var(--accent); color:var(--bg);
+  border:none; border-radius:var(--radius); font-family:var(--font-ui);
+  font-size:13px; font-weight:700; padding:12px; cursor:pointer;
+  transition:background .15s; letter-spacing:.02em;
+}
+.save-btn:hover { background:var(--accent2); }
+.sec-btn {
+  width:100%; background:var(--bg3); color:var(--text2);
+  border:1px solid var(--line2); border-radius:var(--radius); font-family:var(--font-ui);
+  font-size:13px; font-weight:500; padding:11px; cursor:pointer; transition:all .15s; margin-top:6px;
+}
+.sec-btn:hover { background:var(--bg4); color:var(--text); }
+
+/* goal modal */
+.goal-input {
+  width:100%; background:var(--bg3); border:1px solid var(--line2);
+  border-radius:var(--radius); color:var(--text); font-family:var(--font-ui);
+  font-size:28px; font-weight:700; padding:12px 14px; outline:none;
+  text-align:center; transition:border-color .15s; letter-spacing:-.02em;
+}
+.goal-input:focus { border-color:var(--accent); }
+
+/* ═══════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════ */
+.toast {
+  position:fixed; bottom:24px; left:50%;
+  transform:translateX(-50%) translateY(12px);
+  background:var(--bg3); border:1px solid var(--line3);
+  border-radius:var(--radius); padding:9px 18px;
+  font-size:12px; color:var(--text2); opacity:0;
+  transition:all .28s; z-index:1000; pointer-events:none;
+  white-space:nowrap; font-family:var(--font-ui); box-shadow:var(--shadow-sm);
+}
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════ */
+@media(max-width:720px) {
+  .topnav { padding:0 14px; }
+  .nav-tab span { display:none; }
+  .nav-tabs { gap:0; }
+  .app-body { padding:0 14px 60px; padding-top:16px; }
+  .stats-row { grid-template-columns:repeat(3,1fr); }
+  .stat-box:nth-child(4),.stat-box:nth-child(5) { display:none; }
+  .settings-layout { grid-template-columns:1fr; }
+  .settings-nav { border-right:none; border-bottom:1px solid var(--line); display:flex; overflow-x:auto; padding:8px; gap:4px; }
+  .settings-nav-item { padding:7px 12px; border-radius:var(--radius); white-space:nowrap; }
+  .date-2col { grid-template-columns:1fr; }
+  .book-main { padding-left:36px; }
+  .wish-grid { grid-template-columns:1fr; }
+}
+@media(max-width:480px) {
+  .nav-logo span { display:none; }
+  .goals-bar { flex-direction:column; align-items:flex-start; gap:10px; }
+  .goal-track { width:100%; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ── AUTH SCREEN ──────────────────────────────────────── -->
+<div id="view-auth" class="view active" style="display:flex">
+  <div class="auth-card">
+    <div class="auth-logo">The Shelf</div>
+    <p class="auth-tagline">Your personal reading journal</p>
+    <div id="auth-error" class="auth-error"></div>
+    <!-- Login -->
+    <div id="auth-login">
+      <div class="auth-title">Welcome back</div>
+      <div class="auth-sub">Sign in to your bookshelf</div>
+      <div class="auth-field"><label class="auth-label">Email</label><input type="email" class="auth-input" id="login-email" placeholder="you@example.com"></div>
+      <div class="auth-field"><label class="auth-label">Password</label><input type="password" class="auth-input" id="login-pass" placeholder="••••••••"></div>
+      <button class="auth-btn" onclick="doLogin()">Sign in</button>
+      <div class="auth-divider">or</div>
+      <button class="social-btn" onclick="doGoogleLogin()">
+        <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Continue with Google
+      </button>
+      <div class="auth-switch">No account? <a onclick="switchAuth('signup')">Create one free</a></div>
+    </div>
+    <!-- Signup -->
+    <div id="auth-signup" style="display:none">
+      <div class="auth-title">Create your shelf</div>
+      <div class="auth-sub">Free forever. No ads. Just your books.</div>
+      <div class="auth-field"><label class="auth-label">First name</label><input type="text" class="auth-input" id="signup-name" placeholder="Karim"></div>
+      <div class="auth-field"><label class="auth-label">Email</label><input type="email" class="auth-input" id="signup-email" placeholder="you@example.com"></div>
+      <div class="auth-field"><label class="auth-label">Password</label><input type="password" class="auth-input" id="signup-pass" placeholder="At least 8 characters"></div>
+      <button class="auth-btn" onclick="doSignup()">Create my bookshelf</button>
+      <div class="auth-divider">or</div>
+      <button class="social-btn" onclick="doGoogleLogin()">
+        <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Continue with Google
+      </button>
+      <div class="auth-switch">Already have an account? <a onclick="switchAuth('login')">Sign in</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN APP ─────────────────────────────────────────── -->
+<div id="view-app" class="view" style="display:none">
+  <!-- Top nav -->
+  <nav class="topnav">
+    <div class="nav-logo" onclick="goView('library')">The Shelf <span id="nav-user-label"></span></div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" id="tab-library" onclick="goView('library')"><span>📚 </span>Library</button>
+      <button class="nav-tab" id="tab-timeline" onclick="goView('timeline')"><span>📅 </span>Timeline</button>
+      <button class="nav-tab" id="tab-wishlist" onclick="goView('wishlist')"><span>✦ </span>Wishlist</button>
+      <button class="nav-tab" id="tab-settings" onclick="goView('settings')"><span>⚙ </span>Settings</button>
+    </div>
+    <div class="nav-right">
+      <button class="icon-btn" id="theme-toggle-btn" onclick="cycleTheme()" title="Toggle theme">◑</button>
+      <div class="nav-avatar" id="nav-avatar" onclick="goView('settings')">K</div>
+    </div>
+  </nav>
+
+  <!-- Currently Reading Banner -->
+  <div class="currently-reading" id="cr-banner">
+    <div class="cr-label">Currently reading</div>
+    <div class="cr-books" id="cr-books"></div>
+  </div>
+
+  <!-- LIBRARY VIEW -->
+  <div id="view-library" style="display:block">
+    <div class="app-body">
+      <div style="flex:1;min-width:0">
+        <!-- Stats -->
+        <div class="stats-row">
+          <div class="stat-box"><span class="stat-n" id="s-total">0</span><span class="stat-l">Total</span></div>
+          <div class="stat-box"><span class="stat-n" id="s-done" style="color:var(--green)">0</span><span class="stat-l">Finished</span></div>
+          <div class="stat-box"><span class="stat-n" id="s-reading" style="color:var(--blue)">0</span><span class="stat-l">Reading</span></div>
+          <div class="stat-box"><span class="stat-n" id="s-pages">0</span><span class="stat-l">Pages read</span></div>
+          <div class="stat-box"><span class="stat-n" id="s-avg" style="color:var(--accent)">—</span><span class="stat-l">Avg rating</span></div>
+        </div>
+        <!-- Goals bar -->
+        <div class="goals-bar hidden" id="goals-bar">
+          <div class="goal-info">
+            <div class="goal-title" id="goal-title">Reading goal</div>
+            <div class="goal-sub" id="goal-sub"></div>
+          </div>
+          <div class="goal-track">
+            <div class="goal-progress"><div class="goal-fill" id="goal-fill" style="width:0%"></div></div>
+            <div class="goal-pct" id="goal-pct"></div>
+          </div>
+          <button class="goal-edit-btn" onclick="openGoalModal()">Edit goal</button>
+        </div>
+        <!-- Toolbar -->
+        <div class="toolbar">
+          <div class="search-wrap">
+            <span class="search-ic">⌕</span>
+            <input class="search-in" id="search" type="text" placeholder="Search titles or authors…" oninput="applyFilters()">
+          </div>
+          <button class="filter-pill on" onclick="setFilter('all',this)">All</button>
+          <button class="filter-pill" onclick="setFilter('reading',this)">Reading</button>
+          <button class="filter-pill" onclick="setFilter('done',this)">Finished</button>
+          <button class="filter-pill" onclick="setFilter('unread',this)">Unread</button>
+          <button class="filter-pill" onclick="setFilter('reviewed',this)">Reviewed</button>
+        </div>
+        <!-- Categories -->
+        <div id="cats"></div>
+        <!-- Footer -->
+        <div style="margin-top:32px;padding-top:14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+          <span style="font-size:11px;color:var(--text3);font-family:var(--font-ui)">All progress saved automatically</span>
+          <button onclick="toggleAll()" id="expand-all-btn" style="font-size:10px;font-weight:600;font-family:var(--font-ui);letter-spacing:.1em;text-transform:uppercase;color:var(--accent);background:none;border:1px solid rgba(200,164,90,.25);padding:6px 14px;border-radius:var(--radius);cursor:pointer;transition:background .15s" onmouseover="this.style.background='var(--accent-d)'" onmouseout="this.style.background='none'">Expand all</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIMELINE VIEW -->
+  <div id="view-timeline" style="display:none">
+    <div class="app-body">
+      <div style="flex:1;max-width:680px;min-width:0">
+        <div style="margin-bottom:24px">
+          <h2 style="font-size:22px;font-weight:700;font-family:var(--font-ui);margin-bottom:4px">Reading timeline</h2>
+          <p style="font-size:12px;color:var(--text3)">Every book you've finished, in order</p>
+        </div>
+        <div id="timeline-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WISHLIST VIEW -->
+  <div id="view-wishlist" style="display:none">
+    <div class="app-body">
+      <div style="flex:1;min-width:0">
+        <div class="wishlist-header">
+          <div>
+            <h2 style="font-size:22px;font-weight:700;font-family:var(--font-ui);margin-bottom:4px">Wishlist</h2>
+            <p style="font-size:12px;color:var(--text3)">Books you want to read that aren't in the main library</p>
+          </div>
+          <button class="save-btn" style="width:auto;padding:9px 18px;font-size:12px" onclick="toggleWishForm()">+ Add book</button>
+        </div>
+        <div class="add-wish-form" id="wish-form">
+          <div class="wish-grid">
+            <div><label class="fl-label">Title</label><input class="wish-input" id="wish-title" placeholder="Book title"></div>
+            <div><label class="fl-label">Author</label><input class="wish-input" id="wish-author" placeholder="Author name"></div>
+          </div>
+          <div style="margin-bottom:12px"><label class="fl-label">Why you want to read it (optional)</label><input class="wish-input" id="wish-note" placeholder="A note to your future self…"></div>
+          <div style="display:flex;gap:8px">
+            <button class="save-btn" style="font-size:12px;padding:9px" onclick="addWish()">Add to wishlist</button>
+            <button class="sec-btn" style="font-size:12px;padding:9px;margin-top:0" onclick="toggleWishForm()">Cancel</button>
+          </div>
+        </div>
+        <div id="wish-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS VIEW -->
+  <div id="view-settings" style="display:none">
+    <div class="app-body">
+      <div style="flex:1;min-width:0">
+        <div style="margin-bottom:20px">
+          <h2 style="font-size:22px;font-weight:700;font-family:var(--font-ui);margin-bottom:4px">Settings</h2>
+          <p style="font-size:12px;color:var(--text3)">Customize your reading experience</p>
+        </div>
+        <div class="settings-layout">
+          <div class="settings-nav">
+            <div class="settings-nav-item active" onclick="goSettingsTab('appearance',this)"><span>🎨</span> Appearance</div>
+            <div class="settings-nav-item" onclick="goSettingsTab('reading',this)"><span>📖</span> Reading</div>
+            <div class="settings-nav-item" onclick="goSettingsTab('account',this)"><span>👤</span> Account</div>
+            <div class="settings-nav-item" onclick="goSettingsTab('privacy',this)"><span>🔒</span> Privacy</div>
+            <div class="settings-nav-item" onclick="goSettingsTab('data',this)"><span>💾</span> Data</div>
+          </div>
+          <!-- Appearance -->
+          <div class="settings-panel active" id="sp-appearance">
+            <div class="settings-section">
+              <div class="settings-h">Theme</div>
+              <div class="settings-sub">Choose how The Shelf looks</div>
+              <div class="opt-row">
+                <div class="opt-pill on" id="theme-dark" onclick="setTheme('dark',this)">🌙 Dark</div>
+                <div class="opt-pill" id="theme-light" onclick="setTheme('light',this)">☀️ Light</div>
+                <div class="opt-pill" id="theme-sepia" onclick="setTheme('sepia',this)">📜 Sepia</div>
+              </div>
+            </div>
+            <div class="settings-section">
+              <div class="settings-h">Font</div>
+              <div class="settings-sub">Choose your reading font</div>
+              <div class="opt-row" style="margin-bottom:10px">
+                <div class="opt-pill on" id="font-inter" onclick="setFont('inter',this,'Inter, system-ui, sans-serif')">Inter</div>
+                <div class="opt-pill" id="font-merriweather" onclick="setFont('merriweather',this,'Merriweather, serif')">Merriweather</div>
+                <div class="opt-pill" id="font-lora" onclick="setFont('lora',this,'Lora, serif')">Lora</div>
+                <div class="opt-pill" id="font-serif4" onclick="setFont('serif4',this,&quot;Source Serif 4, serif&quot;)">Source Serif</div>
+                <div class="opt-pill" id="font-dmsans" onclick="setFont('dmsans',this,'DM Sans, sans-serif')">DM Sans</div>
+                <div class="opt-pill" id="font-crimson" onclick="setFont('crimson',this,'Crimson Pro, serif')">Crimson</div>
+              </div>
+              <div class="font-preview" id="font-preview">The more that you read, the more things you will know. — Dr. Seuss</div>
+            </div>
+            <div class="settings-section">
+              <div class="settings-h">Font size</div>
+              <div class="settings-sub">Adjust text size throughout the app</div>
+              <div class="opt-row">
+                <div class="opt-pill" id="size-sm" onclick="setSize('sm',this)">Small</div>
+                <div class="opt-pill on" id="size-md" onclick="setSize('md',this)">Medium</div>
+                <div class="opt-pill" id="size-lg" onclick="setSize('lg',this)">Large</div>
+                <div class="opt-pill" id="size-xl" onclick="setSize('xl',this)">X-Large</div>
+              </div>
+            </div>
+          </div>
+          <!-- Reading -->
+          <div class="settings-panel" id="sp-reading">
+            <div class="settings-section">
+              <div class="settings-h">Reading goal</div>
+              <div class="settings-sub">Set a yearly reading target to stay motivated</div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">Books per year</div>
+                  <div class="setting-hint" id="goal-settings-hint">Not set</div>
+                </div>
+                <button class="goal-edit-btn" onclick="openGoalModal()">Set goal</button>
+              </div>
+            </div>
+            <div class="settings-section">
+              <div class="settings-h">Display</div>
+              <div class="settings-sub">Customize how books are shown</div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">Show book themes/notes</div>
+                  <div class="setting-hint">The editorial description under each title</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="tog-notes" checked onchange="savePref('showNotes',this.checked);applyPrefs()"><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">Show page counts</div>
+                  <div class="setting-hint">Display page count chip on each book</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="tog-pages" checked onchange="savePref('showPages',this.checked);applyPrefs()"><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">Compact mode</div>
+                  <div class="setting-hint">Reduce spacing between books</div>
+                </div>
+                <label class="toggle"><input type="checkbox" id="tog-compact" onchange="savePref('compact',this.checked);applyPrefs()"><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+              </div>
+            </div>
+          </div>
+          <!-- Account -->
+          <div class="settings-panel" id="sp-account">
+            <div class="settings-section">
+              <div class="settings-h">Profile</div>
+              <div class="settings-sub">How your shelf appears to you</div>
+              <div class="setting-row">
+                <div class="setting-info"><div class="setting-label">Display name</div><div class="setting-hint">Used in "Karim's Bookshelf"</div></div>
+                <input class="settings-input" id="display-name-input" style="width:160px" placeholder="Your first name" oninput="updateDisplayName(this.value)">
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><div class="setting-label">Email</div><div class="setting-hint" id="acct-email">—</div></div>
+              </div>
+            </div>
+            <div class="settings-section">
+              <div class="settings-h">Session</div>
+              <button class="danger-btn" onclick="doLogout()">Sign out</button>
+            </div>
+          </div>
+          <!-- Privacy -->
+          <div class="settings-panel" id="sp-privacy">
+            <div class="settings-section">
+              <div class="settings-h">Profile visibility</div>
+              <div class="settings-sub">Control who can see your reading activity</div>
+              <div class="setting-row">
+                <div class="setting-info"><div class="setting-label">Public profile</div><div class="setting-hint">Others can see your finished books and ratings</div></div>
+                <label class="toggle"><input type="checkbox" id="tog-public" onchange="savePref('publicProfile',this.checked)"><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><div class="setting-label">Show reviews publicly</div><div class="setting-hint">Your written reviews are visible to others</div></div>
+                <label class="toggle"><input type="checkbox" id="tog-pub-reviews" onchange="savePref('publicReviews',this.checked)"><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><div class="setting-label">Show ratings publicly</div><div class="setting-hint">Your star ratings are visible to others</div></div>
+                <label class="toggle"><input type="checkbox" id="tog-pub-ratings" onchange="savePref('publicRatings',this.checked)"><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+              </div>
+            </div>
+          </div>
+          <!-- Data -->
+          <div class="settings-panel" id="sp-data">
+            <div class="settings-section">
+              <div class="settings-h">Backup & restore</div>
+              <div class="settings-sub">Export your reading data as JSON to save or transfer it</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="success-btn" onclick="exportData()">Export JSON backup</button>
+                <button class="goal-edit-btn" onclick="triggerImport()">Import backup</button>
+                <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+              </div>
+            </div>
+            <div class="settings-section">
+              <div class="settings-h">Danger zone</div>
+              <div class="settings-sub">These actions cannot be undone</div>
+              <button class="danger-btn" onclick="confirmReset()">Reset all reading data</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- end view-app -->
+
+<!-- Journal modal -->
+<div class="backdrop" id="jmodal" onclick="if(event.target.id==='jmodal')closeJournal()">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="jm-title"></div>
+      <div class="modal-meta" id="jm-meta"></div>
+      <button class="modal-x" onclick="closeJournal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="fl">
+        <span class="fl-label">Status</span>
+        <div class="status-row">
+          <button class="sopt" id="ms-idle" onclick="mStatus('idle')">Not started</button>
+          <button class="sopt" id="ms-reading" onclick="mStatus('reading')">Reading now</button>
+          <button class="sopt" id="ms-done" onclick="mStatus('done')">Finished ✓</button>
+        </div>
+      </div>
+      <div class="fl">
+        <span class="fl-label">Dates</span>
+        <div class="date-2col">
+          <div><div class="sub-label">Started</div><input type="date" class="m-input" id="m-start"></div>
+          <div><div class="sub-label">Finished</div><input type="date" class="m-input" id="m-end"></div>
+        </div>
+      </div>
+      <div class="fl">
+        <span class="fl-label">Rating</span>
+        <div class="star-row" id="star-row" onmouseleave="starLeave()"></div>
+        <div class="star-label" id="star-label">Hover &amp; click to rate — left half of a star = ½</div>
+      </div>
+      <div class="fl">
+        <span class="fl-label">Review &amp; impressions</span>
+        <textarea class="review-ta" id="m-review" placeholder="What struck you? What will you carry forward? Write as much or as little as you want."></textarea>
+      </div>
+      <button class="save-btn" onclick="saveJournal()">Save entry</button>
+    </div>
+  </div>
+</div>
+
+<!-- Goal modal -->
+<div class="backdrop" id="gmodal" onclick="if(event.target.id==='gmodal')closeGoalModal()">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-head">
+      <div class="modal-title">Reading goal</div>
+      <div class="modal-meta">Set a yearly target to stay motivated</div>
+      <button class="modal-x" onclick="closeGoalModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="fl">
+        <span class="fl-label">Books I want to read in <span id="goal-year"></span></span>
+        <input type="number" class="goal-input" id="goal-input" min="1" max="500" placeholder="20">
+      </div>
+      <button class="save-btn" onclick="saveGoal()">Set goal</button>
+      <button class="sec-btn" onclick="clearGoal()">Remove goal</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SUPA_URL = 'https://yjeogzjdsvyvoqmnxrem.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlqZW9nempkc3Z5dm9xbW54cmVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0ODU3MTgsImV4cCI6MjA4OTA2MTcxOH0.tUwiX2C8NpJbKZZgFZBB-Eg1sgvvlaOAH4PoANOhufM';
+// ════════════════════════════════════════════
+// BOOK DATA
+// ════════════════════════════════════════════
+const CATS = [
+  { id:'short', title:'Short form', icon:'✦', desc:'Stories, poems & plays you finish in one sitting',
+    subcats:[
+      { id:'stories', label:'Short stories', books:[
+        {id:'white-nights',t:'White Nights',a:'Fyodor Dostoevsky',d:1848,p:96,n:'Romantic idealism crashing against cold reality; the tragedy of the dreamer who cannot connect'},
+        {id:'lady-dog',t:'The Lady with the Dog',a:'Anton Chekhov',d:1899,p:24,n:'Adultery and unexpected genuine love; how the soul can awaken at the most inconvenient moment'},
+        {id:'yellow-wallpaper',t:'The Yellow Wallpaper',a:'Charlotte Perkins Gilman',d:1892,p:64,n:"Women's confinement and rest cures; a descent into madness as the only form of resistance"},
+        {id:'clean-well',t:'A Clean, Well-Lighted Place',a:'Ernest Hemingway',d:1933,p:6,n:'Nada — the void beneath ordinary life; quiet solidarity between men who understand meaninglessness'},
+        {id:'wall-sartre',t:'The Wall',a:'Jean-Paul Sartre',d:1939,p:30,n:'Existential terror: how the certainty of death collapses meaning and reveals what we truly value'},
+        {id:'lottery',t:'The Lottery',a:'Shirley Jackson',d:1948,p:10,n:'Tradition as violence; how communities maintain cruelty through habit and unthinking compliance'},
+        {id:'penal-colony',t:'In the Penal Colony',a:'Franz Kafka',d:1919,p:40,n:'Bureaucratic torture and its own collapse; the horror of systems that outlive their meaning'},
+        {id:'garden-forking',t:'The Garden of Forking Paths',a:'Jorge Luis Borges',d:1941,p:12,n:'Time, labyrinths, and infinite possibility; Borges at his most elegant'},
+        {id:'hills',t:'Hills Like White Elephants',a:'Ernest Hemingway',d:1927,p:7,n:'Everything communicated through what is not said; a masterclass in subtext and moral evasion'},
+        {id:'owl-creek',t:'An Occurrence at Owl Creek Bridge',a:'Ambrose Bierce',d:1890,p:10,n:"The dying mind's self-deception; the gap between desire and reality in the final moment"},
+        {id:'tlon',t:'Tlön, Uqbar, Orbis Tertius',a:'Jorge Luis Borges',d:1940,p:16,n:'Ideas reshaping reality; idealism taken to its terrifying logical conclusion'},
+        {id:'tell-tale',t:'The Tell-Tale Heart',a:'Edgar Allan Poe',d:1843,p:8,n:'Guilt and unreliable narration; the mind as its own torturer'},
+      ]},
+      { id:'poems', label:'Poems', books:[
+        {id:'prufrock',t:'The Love Song of J. Alfred Prufrock',a:'T. S. Eliot',d:1915,p:4,n:'Paralysis, self-consciousness, the unlived life; the tragedy of the person who always hesitates'},
+        {id:'second-coming',t:'The Second Coming',a:'W. B. Yeats',d:1920,p:1,n:"Civilization's unraveling; the rough beast slouching toward Bethlehem"},
+        {id:'ozymandias',t:'Ozymandias',a:'Percy Shelley',d:1818,p:1,n:'The vanity of power and legacy; everything crumbles, even the greatest empires'},
+      ]},
+      { id:'plays', label:'Plays', books:[
+        {id:'oedipus',t:'Oedipus Rex',a:'Sophocles',d:-429,p:88,n:'Fate vs. free will; the horror of knowledge — the truth destroys the man who sought it'},
+        {id:'antigone',t:'Antigone',a:'Sophocles',d:-441,p:80,n:'Divine law vs. state law; the courage of one person against the machinery of power'},
+        {id:'bacchae',t:'The Bacchae',a:'Euripides',d:-405,p:80,n:'Dionysus vs. rational order; when the irrational is denied it returns with catastrophe'},
+        {id:'no-exit',t:'No Exit',a:'Jean-Paul Sartre',d:1944,p:67,n:"Hell is other people — three characters locked together, each the torturer of the others"},
+        {id:'dolls-house',t:"A Doll's House",a:'Henrik Ibsen',d:1879,p:96,n:"A woman's awakening from a marriage of performance; groundbreaking proto-feminist drama"},
+        {id:'hedda',t:'Hedda Gabler',a:'Henrik Ibsen',d:1891,p:107,n:"A brilliant, destructive woman trapped by Victorian society; one of drama's most compelling antiheroes"},
+        {id:'master-builder',t:'The Master Builder',a:'Henrik Ibsen',d:1892,p:112,n:'Ambition, guilt, and the young generation overtaking the old'},
+        {id:'cherry-orchard',t:'The Cherry Orchard',a:'Anton Chekhov',d:1904,p:104,n:'A class dying without realizing it; loss, nostalgia, and the comedy of people unable to change'},
+        {id:'hamlet',t:'Hamlet',a:'William Shakespeare',d:1601,p:192,n:'Paralysis in the face of moral duty; grief, performance, and the impossibility of certain action'},
+        {id:'othello',t:'Othello',a:'William Shakespeare',d:1603,p:172,n:'Jealousy as a weapon wielded by another; race, trust, and how easily love becomes destruction'},
+        {id:'king-lear',t:'King Lear',a:'William Shakespeare',d:1606,p:192,n:'The collapse of authority and family; madness as the only sane response to a broken world'},
+        {id:'salesman',t:'Death of a Salesman',a:'Arthur Miller',d:1949,p:136,n:'The American Dream as a lie that destroys a family; the tragedy of the man who believed it'},
+        {id:'godot',t:'Waiting for Godot',a:'Samuel Beckett',d:1953,p:109,n:'Two men wait for something that never comes; the tragicomedy of existence'},
+        {id:'rosencrantz',t:'Rosencrantz and Guildenstern Are Dead',a:'Tom Stoppard',d:1966,p:126,n:'Two minor characters discover they are in a play, helpless before fate'},
+      ]},
+    ]
+  },
+  { id:'novellas', title:'Novellas', icon:'◆', desc:"Short enough for a weekend, deep enough to last a lifetime",
+    subcats:[
+      { id:'nov-exist', label:'Existential', books:[
+        {id:'death-ivan',t:'The Death of Ivan Ilyich',a:'Leo Tolstoy',d:1886,p:92,n:"A dying judge realizes he has lived falsely; Tolstoy's most devastating short work on mortality"},
+        {id:'notes-underground',t:'Notes from Underground',a:'Fyodor Dostoevsky',d:1864,p:136,n:'Spite, wounded pride, and the perverse refusal to be rational; the birth of existential fiction'},
+        {id:'metamorphosis',t:'The Metamorphosis',a:'Franz Kafka',d:1915,p:80,n:'Alienation, family guilt, and the horror of becoming burdensome to those who claim to love you'},
+        {id:'bartleby',t:'Bartleby, the Scrivener',a:'Herman Melville',d:1853,p:68,n:'Passive resistance as protest; what happens when someone simply refuses to participate in the system'},
+        {id:'fall',t:'The Fall',a:'Albert Camus',d:1956,p:147,n:'A charming man confesses his cowardice; the mechanics of guilt, self-deception, and judgment'},
+        {id:'awakening',t:'The Awakening',a:'Kate Chopin',d:1899,p:189,n:"A woman's slow refusal of the life assigned to her; desire, freedom, and the price of consciousness"},
+      ]},
+      { id:'nov-dark', label:'Dark & gothic', books:[
+        {id:'jekyll',t:'The Strange Case of Dr Jekyll and Mr Hyde',a:'R. L. Stevenson',d:1886,p:141,n:'The duality of respectable Victorian life; repression breeding a monstrous shadow self'},
+        {id:'dorian',t:'The Picture of Dorian Gray',a:'Oscar Wilde',d:1890,p:254,n:'Vanity, moral corruption, and the portrait that pays the price; art, beauty, and the soul'},
+        {id:'turn-screw',t:'The Turn of the Screw',a:'Henry James',d:1898,p:119,n:"One of literature's great ambiguities — are the ghosts real, or is the governess mad?"},
+        {id:'heart-darkness',t:'Heart of Darkness',a:'Joseph Conrad',d:1899,p:111,n:"European imperialism and its psychic cost; the civilised man confronting what civilization actually is"},
+        {id:'kreutzer',t:'The Kreutzer Sonata',a:'Leo Tolstoy',d:1889,p:143,n:'Jealousy, marriage, and sexual possession; one of literature\'s most unsettling confessions'},
+        {id:'death-venice',t:'Death in Venice',a:'Thomas Mann',d:1912,p:111,n:'Obsession, beauty, and artistic dissolution; a man undone by an ideal he cannot possess'},
+      ]},
+      { id:'nov-social', label:'Social & realist', books:[
+        {id:'hero-time',t:'A Hero of Our Time',a:'Mikhail Lermontov',d:1840,p:183,n:"Russia's first psychological novel; the superfluous man who destroys everything he touches out of boredom"},
+        {id:'mice-men',t:'Of Mice and Men',a:'John Steinbeck',d:1937,p:112,n:'The American Dream as cruelty; friendship, innocence, and the violence done to gentle things'},
+        {id:'war-worlds',t:'The War of the Worlds',a:'H. G. Wells',d:1898,p:192,n:'Colonialism reversed: the horror England inflicted on others arrives on English soil'},
+        {id:'daisy-miller',t:'Daisy Miller',a:'Henry James',d:1878,p:88,n:"American innocence vs. European convention; a young woman destroyed by others' judgments"},
+        {id:'billy-budd',t:'Billy Budd',a:'Herman Melville',d:1924,p:132,n:'Innocence condemned by law; the tragedy when goodness encounters the machinery of authority'},
+      ]},
+    ]
+  },
+  { id:'novels', title:'Novels', icon:'▲', desc:'The full form — from one afternoon to one winter',
+    subcats:[
+      { id:'nov-entry', label:'Great entry points', books:[
+        {id:'stranger',t:'The Stranger',a:'Albert Camus',d:1942,p:123,n:'The absurd hero refuses to perform grief or meaning where he feels none — and is condemned for it'},
+        {id:'great-gatsby',t:'The Great Gatsby',a:'F. Scott Fitzgerald',d:1925,p:180,n:"The American Dream as beautiful lie; Gatsby's green light and what it costs to reach for an illusion"},
+        {id:'1984',t:'1984',a:'George Orwell',d:1949,p:328,n:'Totalitarianism, the destruction of language and memory, and the impossibility of love under surveillance'},
+        {id:'frankenstein',t:'Frankenstein',a:'Mary Shelley',d:1818,p:280,n:'Who is the real monster — the abandoned child, or the creator who refused responsibility?'},
+        {id:'east-eden',t:'East of Eden',a:'John Steinbeck',d:1952,p:601,n:"Cain and Abel retold across generations; the Hebrew timshel — thou mayest — as the novel's moral centre"},
+        {id:'tale-cities',t:'A Tale of Two Cities',a:'Charles Dickens',d:1859,p:489,n:'Revolution as both justice and terror; a man finds redemption in the ultimate sacrifice'},
+        {id:'pride-prej',t:'Pride and Prejudice',a:'Jane Austen',d:1813,p:432,n:"Wit and self-knowledge against the marriage market; Darcy's arc is about learning to see beyond pride"},
+      ]},
+      { id:'nov-exist-fic', label:'Existential fiction', books:[
+        {id:'nausea',t:'Nausea',a:'Jean-Paul Sartre',d:1938,p:251,n:'Existence as overwhelming contingency; a historian discovers that things simply are, with no reason'},
+        {id:'trial',t:'The Trial',a:'Franz Kafka',d:1925,p:255,n:'Arrested for an unknown crime; guilt, authority, and the absurd machinery of systems that will not explain themselves'},
+        {id:'castle',t:'The Castle',a:'Franz Kafka',d:1926,p:352,n:'A man tries and fails to gain access to a bureaucratic castle; exclusion, futility, and the unknowable'},
+        {id:'steppenwolf',t:'Steppenwolf',a:'Hermann Hesse',d:1927,p:248,n:'A man torn between bourgeois life and wild spirit; alienation, duality, and the possibility of transcendence'},
+        {id:'werther',t:'The Sorrows of Young Werther',a:'Johann Goethe',d:1774,p:144,n:'Romantic suffering as self-destruction; the first literary celebrity death'},
+        {id:'remains',t:'The Remains of the Day',a:'Kazuo Ishiguro',d:1989,p:256,n:'A butler realizes too late that dignity cost him his life; repression, loyalty, and the unlived life'},
+        {id:'hunger',t:'Hunger',a:'Knut Hamsun',d:1890,p:230,n:'A starving writer refuses to compromise his pride; extreme interiority and the irrational will'},
+        {id:'book-disquiet',t:'The Book of Disquiet',a:'Fernando Pessoa',d:1982,p:272,n:"A Lisbon clerk's fragmentary prose poems; melancholy, self-observation, the beauty of inner life"},
+        {id:'magic-mountain',t:'The Magic Mountain',a:'Thomas Mann',d:1924,p:720,n:'A man visits a sanatorium and stays seven years; every European ideology debating before WWI'},
+      ]},
+      { id:'nov-satire', label:'Satirical & comic', books:[
+        {id:'candide',t:'Candide',a:'Voltaire',d:1759,p:144,n:'Relentless satire of optimism; the world is absurd and cruel, and anyone who says otherwise is deluded'},
+        {id:'dead-souls',t:'Dead Souls',a:'Nikolai Gogol',d:1842,p:432,n:'A con man buys dead serfs to mortgage — brilliantly absurd satire of Russian provincial life'},
+        {id:'gulliver',t:"Gulliver's Travels",a:'Jonathan Swift',d:1726,p:336,n:"Savage political satire dressed as a children's adventure; by the end, Gulliver hates humanity itself"},
+        {id:'master-margarita',t:'The Master and Margarita',a:'Mikhail Bulgakov',d:1967,p:372,n:'The devil visits Soviet Moscow; skewers totalitarianism and cowardice with wild brilliance'},
+        {id:'catch22',t:'Catch-22',a:'Joseph Heller',d:1961,p:453,n:"You can only be grounded if you're crazy, but asking proves you're sane — the bureaucratic logic of war"},
+        {id:'justified-sinner',t:'Confessions of a Justified Sinner',a:'James Hogg',d:1824,p:256,n:'A religious fanatic convinced he is predestined; doubles, the devil, and the horror of certainty'},
+        {id:'tin-drum',t:'The Tin Drum',a:'Günter Grass',d:1959,p:600,n:"A boy refuses to grow up, narrating Nazi Germany's rise; magical realism as political horror"},
+        {id:'don-quixote',t:'Don Quixote',a:'Miguel de Cervantes',d:1605,p:1072,n:'The first modern novel — a man driven mad by books who mistakes windmills for giants'},
+      ]},
+      { id:'nov-realism', label:'Social & moral realism', books:[
+        {id:'madame-bovary',t:'Madame Bovary',a:'Gustave Flaubert',d:1857,p:329,n:"Romantic delusion vs. provincial reality; Emma's imagination destroys her because the world cannot match it"},
+        {id:'red-black',t:'The Red and the Black',a:'Stendhal',d:1830,p:576,n:"A carpenter's son climbs French society through calculated seduction; ambition, hypocrisy, class"},
+        {id:'age-innocence',t:'The Age of Innocence',a:'Edith Wharton',d:1920,p:362,n:"A man sacrifices love to convention and barely notices until it's too late; Old New York as a gilded trap"},
+        {id:'dubliners',t:'Dubliners',a:'James Joyce',d:1914,p:256,n:"Irish lives paralyzed by religion and colonial history; 'The Dead' is one of literature's greatest stories"},
+        {id:'east-eden-r',t:'East of Eden',a:'John Steinbeck',d:1952,p:601,n:"Cain and Abel retold; the Hebrew timshel — thou mayest — as the novel's moral centre"},
+        {id:'germinal',t:'Germinal',a:'Émile Zola',d:1885,p:592,n:"Coal miners and a strike; naturalism at its most powerful — brutal, compassionate, politically alive"},
+        {id:'middlemarch',t:'Middlemarch',a:'George Eliot',d:1871,p:904,n:"The greatest English novel; moral intelligence and the unhistoric acts that make civilization possible"},
+        {id:'house-spirits',t:'The House of the Spirits',a:'Isabel Allende',d:1982,p:433,n:'Four generations of a Chilean family; magical realism meets political violence — love, memory, resistance'},
+        {id:'washington-sq',t:'Washington Square',a:'Henry James',d:1880,p:189,n:"A plain rich woman and the man who courts her for money; one of literature's cruellest plots"},
+      ]},
+      { id:'nov-dystopia', label:'Dystopian & speculative', books:[
+        {id:'time-machine',t:'The Time Machine',a:'H. G. Wells',d:1895,p:118,n:"Class division taken to its evolutionary conclusion; the Eloi and Morlocks as capitalism's end state"},
+        {id:'we',t:'We',a:'Yevgeny Zamyatin',d:1924,p:240,n:'The original dystopia, which influenced Orwell directly; the terror of individuality in the glass city'},
+        {id:'brave-new',t:'Brave New World',a:'Aldous Huxley',d:1932,p:311,n:'Pleasure as the most effective form of control; consumption, soma, and the death of depth'},
+        {id:'handmaids',t:"The Handmaid's Tale",a:'Margaret Atwood',d:1985,p:311,n:'Theocratic patriarchy; the body as political territory and the survival strategies of the oppressed'},
+        {id:'dispossessed',t:'The Dispossessed',a:'Ursula K. Le Guin',d:1974,p:387,n:'Two worlds — anarchist and capitalist — examined without illusions'},
+      ]},
+      { id:'nov-magical', label:'Magical realism', books:[
+        {id:'pedro',t:'Pedro Páramo',a:'Juan Rulfo',d:1955,p:124,n:'A man searches for his father in a ghost town; the novel García Márquez read and immediately understood'},
+        {id:'invisible',t:'Invisible Cities',a:'Italo Calvino',d:1972,p:165,n:'Marco Polo describes impossible cities to Kublai Khan; meditations on memory, desire, and civilization'},
+        {id:'hundred-years',t:'One Hundred Years of Solitude',a:'Gabriel García Márquez',d:1967,p:417,n:"A family and town's rise and fall across a century; myth, history, and the cycles of human solitude"},
+        {id:'beloved',t:'Beloved',a:'Toni Morrison',d:1987,p:321,n:'A freed slave haunted by the ghost of her murdered child; trauma, memory, and the costs of survival'},
+        {id:'winter-night',t:"If on a winter's night a traveler",a:'Italo Calvino',d:1979,p:260,n:"A book about the act of reading — playful, disorienting, and strangely moving"},
+        {id:'midnights',t:"Midnight's Children",a:'Salman Rushdie',d:1981,p:647,n:"India's independence through a child born at midnight; history, identity, and a nation's birth"},
+      ]},
+      { id:'nov-modernist', label:'Modernist', books:[
+        {id:'mrs-dalloway',t:'Mrs Dalloway',a:'Virginia Woolf',d:1925,p:194,n:"A single day in a woman's mind; time, memory, shell shock, and layers of a life lived in consciousness"},
+        {id:'sound-fury',t:'The Sound and the Fury',a:'William Faulkner',d:1929,p:326,n:"A Southern family's collapse told four times from four fractured perspectives; time and decay"},
+        {id:'lighthouse',t:'To the Lighthouse',a:'Virginia Woolf',d:1927,p:209,n:"Time's passage and what remains; grief, art, and whether we can ever truly know another person"},
+        {id:'as-i-lay',t:'As I Lay Dying',a:'William Faulkner',d:1930,p:267,n:'Fifteen narrators carry a dead woman to burial; darkly comic and formally radical'},
+        {id:'radetzky',t:'The Radetzky March',a:'Joseph Roth',d:1932,p:352,n:"The Austro-Hungarian Empire's decay through three generations; elegy for a lost world"},
+        {id:'ulysses',t:'Ulysses (select chapters)',a:'James Joyce',d:1922,p:730,n:'Read Lestrygonians and Penelope first; one of the great achievements of language'},
+      ]},
+    ]
+  },
+  { id:'long', title:'Long novels', icon:'◉', desc:'The most rewarding books ever written — plan a month',
+    subcats:[
+      { id:'long-russian', label:'The Russians', books:[
+        {id:'crime',t:'Crime and Punishment',a:'Fyodor Dostoevsky',d:1866,p:671,n:'Can a superior man justify murder? Guilt dismantles the theory before the law even intervenes'},
+        {id:'brothers',t:'The Brothers Karamazov',a:'Fyodor Dostoevsky',d:1880,p:824,n:'Faith, doubt, parricide, and the Grand Inquisitor; every major question of human existence'},
+        {id:'anna',t:'Anna Karenina',a:'Leo Tolstoy',d:1878,p:864,n:"Love, society, and moral law; Levin's search for meaning is as central as Anna's tragedy"},
+        {id:'idiot',t:'The Idiot',a:'Fyodor Dostoevsky',d:1869,p:667,n:'What happens to a truly good, innocent man in a corrupt world? He is destroyed — with his own gentle complicity'},
+        {id:'demons',t:'Demons (The Possessed)',a:'Fyodor Dostoevsky',d:1872,p:768,n:'Political radicalism as spiritual disease; prophesied 20th-century totalitarianism with terrifying accuracy'},
+        {id:'oblomov',t:'Oblomov',a:'Ivan Goncharov',d:1859,p:518,n:"A man who will not get out of bed; paralysis, privilege, and the superfluous man as philosophical comedy"},
+        {id:'war-peace',t:'War and Peace',a:'Leo Tolstoy',d:1869,p:1225,n:'History vs. the individual; Natasha, Pierre, and Andrei searching for meaning while an empire falls'},
+      ]},
+      { id:'long-europe', label:'Europe & Americas', books:[
+        {id:'count',t:'The Count of Monte Cristo',a:'Alexandre Dumas',d:1844,p:1276,n:'Revenge, justice, and whether revenge satisfies; compulsively readable and morally complex'},
+        {id:'les-mis',t:'Les Misérables',a:'Victor Hugo',d:1862,p:1463,n:'Justice, mercy, and redemption; Valjean and Javert as the two poles of the moral universe'},
+        {id:'moby',t:'Moby-Dick',a:'Herman Melville',d:1851,p:635,n:'Obsession, the indifferent universe, and the white whale as everything; the great American philosophical novel'},
+        {id:'buddenbrooks',t:'Buddenbrooks',a:'Thomas Mann',d:1901,p:736,n:"Four generations of a merchant family's decline; Mann's first novel and arguably his most readable"},
+        {id:'proust',t:'In Search of Lost Time Vol. 1',a:'Marcel Proust',d:1913,p:467,n:"Start with Swann's Way; the madeleine, involuntary memory, and how the past lives inside sensation"},
+      ]},
+    ]
+  },
+  { id:'ancient', title:'Ancient & classical', icon:'◎', desc:'The originals — surprisingly alive after 2,000+ years',
+    subcats:[
+      { id:'anc-greek', label:'Greek', books:[
+        {id:'iliad',t:'The Iliad',a:'Homer',d:-750,p:683,n:"War, glory, grief, and mortality; Achilles' rage and what it costs him — the original tragic hero"},
+        {id:'odyssey',t:'The Odyssey',a:'Homer',d:-725,p:541,n:'Cunning over strength; the long journey home as a test of identity and endurance'},
+        {id:'theogony',t:'Theogony',a:'Hesiod',d:-700,p:68,n:'The birth of the Greek gods; the original cosmology — chaos, Titans, Olympians'},
+        {id:'apology',t:'Apology',a:'Plato',d:-399,p:48,n:"Socrates' defence at his trial; a man who will not compromise his philosophy to save his life"},
+        {id:'symposium',t:'Symposium',a:'Plato',d:-385,p:96,n:"What is love? Speeches from great minds culminating in Diotima's vision of beauty itself"},
+        {id:'republic',t:'The Republic',a:'Plato',d:-375,p:416,n:'Justice, the ideal state, and the allegory of the cave; foundation of Western political philosophy'},
+      ]},
+      { id:'anc-roman', label:'Roman', books:[
+        {id:'lucretius',t:'On the Nature of Things',a:'Lucretius',d:-50,p:288,n:'Epicurean atomism as sublime Latin poetry; death is nothing to fear because the soul dissolves'},
+        {id:'amores',t:'The Amores',a:'Ovid',d:-16,p:192,n:'Playful, self-aware love poetry; Ovid mocking the conventions of love elegy even as he writes them'},
+        {id:'aeneid',t:'The Aeneid: Book 4',a:'Virgil',d:-19,p:442,n:"Passion vs. duty; Dido's devastating love and abandonment — one of antiquity's great tragic figures"},
+        {id:'metamorphoses',t:'Metamorphoses',a:'Ovid',d:8,p:723,n:"Transformation as the universe's constant; 250 myths retold with wit, beauty, and strangeness"},
+        {id:'satyricon',t:'The Satyricon',a:'Petronius',d:60,p:192,n:"Bawdy, brilliant satire of Roman excess; Trimalchio's dinner is a masterpiece of social comedy"},
+        {id:'letters-stoic',t:'Letters from a Stoic',a:'Seneca',d:65,p:256,n:'Practical Stoic wisdom in letter form; on time, friendship, death — immediate and personal'},
+        {id:'meditations',t:'Meditations',a:'Marcus Aurelius',d:180,p:254,n:'Stoic philosophy as private discipline; written to himself, never for publication — raw and honest'},
+        {id:'consolation',t:'The Consolation of Philosophy',a:'Boethius',d:524,p:192,n:"Written awaiting execution; Fortune's wheel, free will, and whether goodness can survive catastrophe"},
+      ]},
+    ]
+  },
+  { id:'philosophy', title:'Philosophy', icon:'◇', desc:'Ideas that make everything else richer',
+    subcats:[
+      { id:'phil-ancient', label:'Ancient & Stoic', books:[
+        {id:'meditations-p',t:'Meditations',a:'Marcus Aurelius',d:180,p:254,n:'Read in tandem with Seneca; private discipline as daily practice'},
+        {id:'letters-stoic-p',t:'Letters from a Stoic',a:'Seneca',d:65,p:256,n:'Practical, warm, and immediate; on time, friendship, death — the most readable ancient philosophy'},
+        {id:'apology-p',t:'Apology',a:'Plato',d:-399,p:48,n:"Socrates defends himself; a man who will not compromise his philosophy to save his life"},
+        {id:'republic-p',t:'The Republic',a:'Plato',d:-375,p:416,n:'Justice, the ideal state, and the allegory of the cave'},
+      ]},
+      { id:'phil-modern', label:'Modern', books:[
+        {id:'myth-sis',t:'The Myth of Sisyphus',a:'Albert Camus',d:1942,p:212,n:'The philosophical spine of all his fiction; read after The Stranger and The Fall'},
+        {id:'pensees',t:'Pensées',a:'Blaise Pascal',d:1670,p:320,n:'Fragmentary and brilliant; the wager, the silence of infinite spaces, and man without God'},
+        {id:'fear-trembling',t:'Fear and Trembling',a:'Søren Kierkegaard',d:1843,p:166,n:"Abraham's sacrifice as philosophical problem; the leap of faith"},
+        {id:'either-or',t:'Either/Or',a:'Søren Kierkegaard',d:1843,p:832,n:'The aesthetic life vs. the ethical life; the either/or that precedes the leap of faith'},
+        {id:'beyond-good',t:'Beyond Good and Evil',a:'Friedrich Nietzsche',d:1886,p:240,n:'More accessible than Zarathustra; the critique of morality as herd instinct'},
+        {id:'zarathustra',t:'Thus Spoke Zarathustra',a:'Friedrich Nietzsche',d:1883,p:352,n:'The death of God, the Übermensch, eternal recurrence — philosophy as poetry'},
+        {id:'confessions',t:'Confessions',a:'Augustine of Hippo',d:400,p:311,n:'The first Western autobiography; desire, conversion, and the restless heart — extraordinary prose'},
+        {id:'on-liberty',t:'On Liberty',a:'John Stuart Mill',d:1859,p:128,n:"The harm principle and freedom of thought; the liberal tradition's strongest argument"},
+        {id:'social-contract',t:'The Social Contract',a:'Jean-Jacques Rousseau',d:1762,p:168,n:'Essential context for the Revolutionary novels; where political philosophy and fiction meet'},
+      ]},
+    ]
+  },
+];
+
+// ════════════════════════════════════════════
+// STATE & PERSISTENCE
+// ════════════════════════════════════════════
+const STORE = 'shelf_user_v2';
+let state = { userId:null, name:'Reader', email:'', theme:'dark', font:'inter', size:'md', showNotes:true, showPages:true, compact:false, publicProfile:false, publicReviews:false, publicRatings:false, goal:0, books:{}, wishlist:[] };
+try { const s = JSON.parse(localStorage.getItem(STORE)); if(s) state = {...state,...s}; } catch(e){}
+function persist() { localStorage.setItem(STORE, JSON.stringify(state)); }
+function getBook(id) { return state.books[id] || {status:'idle',rating:0,review:'',start:'',end:''}; }
+
+// ════════════════════════════════════════════
+// SUPABASE AUTH
+// ════════════════════════════════════════════
+const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+// Listen for auth state
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (session?.user) {
+    state.userId = session.user.id;
+    state.email = session.user.email;
+    await loadFromSupabase(session.user.id);
+    showApp();
+  } else {
+    document.getElementById('view-auth').style.display = 'flex';
+    document.getElementById('view-app').style.display = 'none';
+  }
+});
+
+async function loadFromSupabase(uid) {
+  // Profile
+  const { data: prof } = await sb.from('profiles').select('*').eq('id', uid).single();
+  if (prof) {
+    state.name = prof.first_name || 'Reader';
+    state.theme = prof.theme || 'dark';
+    state.font = prof.font || 'inter';
+    state.size = prof.font_size || 'md';
+    state.showNotes = prof.show_notes !== false;
+    state.showPages = prof.show_pages !== false;
+    state.compact = !!prof.compact_mode;
+    state.goal = prof.reading_goal || 0;
+    state.publicProfile = !!prof.public_profile;
+    state.publicReviews = !!prof.public_reviews;
+    state.publicRatings = !!prof.public_ratings;
+  }
+  // Book logs
+  const { data: logs } = await sb.from('book_logs').select('*').eq('user_id', uid);
+  state.books = {};
+  (logs||[]).forEach(l => {
+    state.books[l.book_id] = { status:l.status, rating:l.rating, review:l.review, start:l.date_started, end:l.date_finished };
+  });
+  // Wishlist
+  const { data: wl } = await sb.from('wishlist').select('*').eq('user_id', uid).order('created_at', {ascending:false});
+  state.wishlist = (wl||[]).map(w => ({ id:w.id, title:w.title, author:w.author, note:w.note }));
+}
+
+async function syncBookToSupabase(id) {
+  if (!state.userId) return;
+  const u = state.books[id] || {};
+  await sb.from('book_logs').upsert({
+    user_id: state.userId, book_id: id,
+    status: u.status||'idle', rating: u.rating||0,
+    review: u.review||'', date_started: u.start||null, date_finished: u.end||null,
+    updated_at: new Date().toISOString()
+  }, { onConflict: 'user_id,book_id' });
+}
+
+async function syncProfileToSupabase(updates) {
+  if (!state.userId) return;
+  await sb.from('profiles').update({ ...updates, updated_at: new Date().toISOString() }).eq('id', state.userId);
+}
+
+function switchAuth(mode) {
+  ['auth-login','auth-signup'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = (id === 'auth-'+mode) ? 'block' : 'none';
+  });
+  const err = document.getElementById('auth-error');
+  if (err) err.style.display = 'none';
+}
+
+function showAuthError(msg) {
+  const el = document.getElementById('auth-error');
+  if (el) { el.textContent = msg; el.style.display = 'block'; }
+}
+
+async function doLogin() {
+  const emailEl = document.getElementById('login-email') || document.getElementById('li-email');
+  const passEl  = document.getElementById('login-pass')  || document.getElementById('li-pass');
+  const email = emailEl?.value.trim(); const pass = passEl?.value;
+  if (!email||!pass) { showAuthError('Please enter your email and password'); return; }
+  const btn = document.getElementById('li-btn');
+  if (btn) { btn.disabled=true; btn.textContent='Signing in…'; }
+  const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+  if (btn) { btn.disabled=false; btn.textContent='Sign in'; }
+  if (error) showAuthError(error.message==='Invalid login credentials'?'Incorrect email or password':error.message);
+}
+
+async function doSignup() {
+  const nameEl  = document.getElementById('signup-name')  || document.getElementById('su-name');
+  const emailEl = document.getElementById('signup-email') || document.getElementById('su-email');
+  const passEl  = document.getElementById('signup-pass')  || document.getElementById('su-pass');
+  const name=nameEl?.value.trim(), email=emailEl?.value.trim(), pass=passEl?.value;
+  if (!name||!email||!pass) { showAuthError('Please fill in all fields'); return; }
+  if (pass.length<8) { showAuthError('Password must be at least 8 characters'); return; }
+  const btn = document.getElementById('su-btn');
+  if (btn) { btn.disabled=true; btn.textContent='Creating…'; }
+  const { error } = await sb.auth.signUp({ email, password: pass, options: { data: { first_name: name } } });
+  if (btn) { btn.disabled=false; btn.textContent='Create my bookshelf'; }
+  if (error) showAuthError(error.message);
+  else showAuthError('✓ Check your email to confirm your account, then sign in!');
+}
+
+async function doGoogleLogin() {
+  const { error } = await sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.origin + window.location.pathname }
+  });
+  if (error) showAuthError(error.message);
+}
+
+async function doLogout() {
+  if (!confirm('Sign out of The Shelf?')) return;
+  await sb.auth.signOut();
+  state.books = {}; state.wishlist = []; state.userId = null;
+  toast('Signed out');
+}
+
+function showApp() {
+  document.getElementById('view-auth').style.display = 'none';
+  document.getElementById('view-app').style.display = 'block';
+  initApp();
+}
+// ════════════════════════════════════════════
+// APP INIT
+// ════════════════════════════════════════════
+function initApp() {
+  applyTheme(state.theme);
+  applyFont(state.font);
+  applySize(state.size);
+  updateNavUser();
+  renderCats();
+  renderCurrentlyReading();
+  updateStats();
+  updateGoalBar();
+  loadSettingsUI();
+  applyPrefs();
+}
+
+function updateNavUser() {
+  const n = state.name||'Reader';
+  document.getElementById('nav-user-label').textContent = '— '+n+"'s Bookshelf";
+  document.getElementById('nav-avatar').textContent = n[0].toUpperCase();
+  document.getElementById('display-name-input').value = n;
+  document.getElementById('acct-email').textContent = state.email||'—';
+}
+
+// Supabase handles session persistence automatically via onAuthStateChange
+
+// ════════════════════════════════════════════
+// VIEWS
+// ════════════════════════════════════════════
+function goView(v) {
+  ['library','timeline','wishlist','settings'].forEach(id => {
+    const el = document.getElementById('view-'+id);
+    if (el) el.style.display = id===v?'block':'none';
+    const tab = document.getElementById('tab-'+id);
+    if (tab) tab.classList.toggle('active', id===v);
+  });
+  if (v==='timeline') renderTimeline();
+  if (v==='wishlist') renderWishlist();
+  if (v==='settings') loadSettingsUI();
+}
+
+// ════════════════════════════════════════════
+// RENDER CATEGORIES
+// ════════════════════════════════════════════
+function fmtYear(d) { return d<0?Math.abs(d)+'BC':String(d); }
+function starsHTML(r) {
+  let h='';
+  for(let i=1;i<=5;i++){
+    if(r>=i) h+='<span class="si si-f">★</span>';
+    else if(r>=i-.5) h+='<span class="si si-h">★</span>';
+    else h+='<span class="si si-e">★</span>';
+  }
+  return h;
+}
+function btnLabel(s){return s==='done'?'Finished ✓':s==='reading'?'Reading…':'Mark reading';}
+function btnCls(s){return 'tbtn tbtn-'+s;}
+
+function renderCats() {
+  const root = document.getElementById('cats');
+  root.innerHTML='';
+  CATS.forEach(cat => {
+    const el = document.createElement('div');
+    el.className='cat'; el.id='cat-'+cat.id;
+    let scHTML='';
+    cat.subcats.forEach(sc => {
+      const bHTML = sc.books.map((b,bi)=>{
+        const u=getBook(b.id);
+        return `<div class="book-row s-${u.status}" id="row-${b.id}" data-cat="${cat.id}" data-status="${u.status}" data-review="${u.review?'1':'0'}" data-title="${b.t.toLowerCase()}" data-author="${b.a.toLowerCase()}">
+          <div class="book-main">
+            <div class="book-top"><span class="book-title">${b.t}</span><span class="book-author">${b.a}</span></div>
+            <div class="book-chips">
+              <span class="chip chip-meta">${fmtYear(b.d)}</span>
+              <span class="chip chip-meta pages-chip">${b.p}pp</span>
+              ${u.status==='done'?'<span class="chip chip-done">✓ done</span>':u.status==='reading'?'<span class="chip chip-reading">● reading</span>':''}
+            </div>
+            <div id="dates-${b.id}" class="book-dates">${fmtDates(u)}</div>
+            <div id="stars-${b.id}" class="book-stars">${u.rating>0?starsHTML(u.rating):''}</div>
+            <div id="snip-${b.id}" class="book-snip">${u.review?'"'+u.review.slice(0,110)+(u.review.length>110?'…':'')+'"':''}</div>
+            <div class="book-note">${b.n}</div>
+          </div>
+          <div class="book-actions">
+            <button class="${btnCls(u.status)}" id="tbtn-${b.id}" onclick="cycleStatus('${b.id}',event)">${btnLabel(u.status)}</button>
+            <button class="jbtn${u.review||u.rating>0?' lit':''}" id="jbtn-${b.id}" onclick="openJournal('${b.id}',event)">journal ✎</button>
+          </div>
+        </div>`;
+      }).join('');
+      scHTML+=`<div class="subcat" id="sc-${sc.id}">
+        <div class="subcat-head" onclick="toggleSubcat(this.parentElement)">
+          <span class="subcat-name">${sc.label}</span>
+          <span class="subcat-count" id="scp-${sc.id}">${sc.books.length} books</span>
+          <span class="subcat-chev"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="2.5,1 7.5,5 2.5,9"/></svg></span>
+        </div>
+        <div class="subcat-body" id="scb-${sc.id}">${bHTML}</div>
+      </div>`;
+    });
+    el.innerHTML=`
+      <div class="cat-head" onclick="toggleCat(this.parentElement)">
+        <span class="cat-icon">${cat.icon}</span>
+        <div class="cat-info"><div class="cat-name">${cat.title}</div><div class="cat-desc">${cat.desc}</div></div>
+        <div class="cat-meta">
+          <span class="cat-pct" id="cp-${cat.id}"></span>
+          <div class="minibar"><div class="minibar-fill" id="cmb-${cat.id}" style="width:0%"></div></div>
+          <div class="chev"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,1 9,6 3,11"/></svg></div>
+        </div>
+      </div>
+      <div class="cat-body" id="cb-${cat.id}"><div>${scHTML}</div></div>`;
+    root.appendChild(el);
+    updateCatProg(cat.id);
+  });
+}
+
+function fmtDates(u) {
+  if(!u.start&&!u.end) return '';
+  let s='';
+  if(u.start) s+='Started '+u.start;
+  if(u.start&&u.end) s+=' · ';
+  if(u.end) s+='Finished '+u.end;
+  return s;
+}
+
+// ════════════════════════════════════════════
+// TOGGLES
+// ════════════════════════════════════════════
+function toggleCat(cat) {
+  const id=cat.id.replace('cat-','');
+  const body=document.getElementById('cb-'+id);
+  const open=cat.classList.contains('open');
+  if(open){body.style.maxHeight='0';cat.classList.remove('open');}
+  else{body.style.maxHeight=body.scrollHeight+'px';cat.classList.add('open');}
+}
+function toggleSubcat(sc) {
+  const id=sc.id.replace('sc-','');
+  const body=document.getElementById('scb-'+id);
+  const open=sc.classList.contains('open');
+  if(open){body.style.maxHeight='0';sc.classList.remove('open');}
+  else{
+    sc.classList.add('open');
+    body.style.maxHeight=body.scrollHeight+'px';
+    // expand parent cat if needed
+    const cat=sc.closest('.cat');
+    if(cat&&!cat.classList.contains('open')){
+      cat.classList.add('open');
+      document.getElementById('cb-'+cat.id.replace('cat-','')).style.maxHeight='9999px';
+    }
+    const cb=sc.closest('.cat-body');
+    if(cb) cb.style.maxHeight=cb.scrollHeight+'px';
+  }
+}
+let allExpanded=false;
+function toggleAll() {
+  allExpanded=!allExpanded;
+  CATS.forEach(cat=>{
+    const catEl=document.getElementById('cat-'+cat.id);
+    const cb=document.getElementById('cb-'+cat.id);
+    cat.subcats.forEach(sc=>{
+      const scEl=document.getElementById('sc-'+sc.id);
+      const scb=document.getElementById('scb-'+sc.id);
+      if(allExpanded){scEl.classList.add('open');scb.style.maxHeight=scb.scrollHeight+'px';}
+      else{scEl.classList.remove('open');scb.style.maxHeight='0';}
+    });
+    if(allExpanded){catEl.classList.add('open');cb.style.maxHeight=cb.scrollHeight+'px';}
+    else{catEl.classList.remove('open');cb.style.maxHeight='0';}
+  });
+  document.getElementById('expand-all-btn').textContent=allExpanded?'Collapse all':'Expand all';
+}
+
+// ════════════════════════════════════════════
+// STATUS
+// ════════════════════════════════════════════
+function cycleStatus(id,e) {
+  e.stopPropagation();
+  const u=getBook(id);
+  const cycle={idle:'reading',reading:'done',done:'idle'};
+  u.status=cycle[u.status]||'idle';
+  if(u.status==='reading'&&!u.start) u.start=today();
+  if(u.status==='done'&&!u.end) u.end=today();
+  if(u.status==='idle'){u.start='';u.end='';}
+  state.books[id]=u; persist();
+  refreshRow(id,u);
+  renderCurrentlyReading();
+  toast(u.status==='done'?'Marked as finished ✓':u.status==='reading'?'Added to reading list':'Removed from reading list');
+}
+function today(){return new Date().toISOString().slice(0,10);}
+
+function refreshRow(id,u) {
+  const row=document.getElementById('row-'+id);
+  if(!row) return;
+  row.className=`book-row s-${u.status}`;
+  row.dataset.status=u.status; row.dataset.review=u.review?'1':'0';
+  const tb=document.getElementById('tbtn-'+id);
+  if(tb){tb.className=btnCls(u.status);tb.textContent=btnLabel(u.status);}
+  const chips=row.querySelector('.book-chips');
+  if(chips){
+    ['chip-done','chip-reading'].forEach(c=>{const el=chips.querySelector('.'+c);if(el)el.remove();});
+    if(u.status==='done') chips.insertAdjacentHTML('beforeend','<span class="chip chip-done">✓ done</span>');
+    if(u.status==='reading') chips.insertAdjacentHTML('beforeend','<span class="chip chip-reading">● reading</span>');
+  }
+  const de=document.getElementById('dates-'+id); if(de) de.textContent=fmtDates(u);
+  const se=document.getElementById('stars-'+id); if(se) se.innerHTML=u.rating>0?starsHTML(u.rating):'';
+  const sn=document.getElementById('snip-'+id); if(sn) sn.innerHTML=u.review?'"'+u.review.slice(0,110)+(u.review.length>110?'…':'')+'"':'';
+  const jb=document.getElementById('jbtn-'+id); if(jb) jb.className='jbtn'+(u.review||u.rating>0?' lit':'');
+  updateCatProg(row.dataset.cat);
+  updateStats(); updateGoalBar();
+}
+
+// ════════════════════════════════════════════
+// PROGRESS & STATS
+// ════════════════════════════════════════════
+function updateCatProg(catId) {
+  const cat=CATS.find(c=>c.id===catId); if(!cat) return;
+  const all=cat.subcats.flatMap(s=>s.books);
+  const done=all.filter(b=>(state.books[b.id]||{}).status==='done').length;
+  const total=all.length; const pct=total?Math.round(done/total*100):0;
+  const pe=document.getElementById('cp-'+catId); const be=document.getElementById('cmb-'+catId);
+  if(pe){pe.textContent=done+'/'+total; pe.className='cat-pct'+(done>0?' lit':'');}
+  if(be) be.style.width=pct+'%';
+  cat.subcats.forEach(sc=>{
+    const sd=sc.books.filter(b=>(state.books[b.id]||{}).status==='done').length;
+    const el=document.getElementById('scp-'+sc.id);
+    if(el) el.textContent=(sd>0?sd+'✓ / ':'')+sc.books.length+' books';
+  });
+}
+function updateStats() {
+  let total=0,done=0,reading=0,pages=0,rSum=0,rCount=0;
+  CATS.forEach(cat=>cat.subcats.forEach(sc=>sc.books.forEach(b=>{
+    total++;
+    const u=state.books[b.id]||{};
+    if(u.status==='done'){done++;pages+=(b.p||0);}
+    if(u.status==='reading') reading++;
+    if(u.rating>0){rSum+=u.rating;rCount++;}
+  })));
+  document.getElementById('s-total').textContent=total;
+  document.getElementById('s-done').textContent=done;
+  document.getElementById('s-reading').textContent=reading;
+  document.getElementById('s-pages').textContent=pages.toLocaleString();
+  document.getElementById('s-avg').textContent=rCount>0?(rSum/rCount).toFixed(1)+'★':'—';
+}
+
+// ════════════════════════════════════════════
+// CURRENTLY READING
+// ════════════════════════════════════════════
+function renderCurrentlyReading() {
+  const container=document.getElementById('cr-books');
+  const banner=document.getElementById('cr-banner');
+  let reading=[];
+  CATS.forEach(cat=>cat.subcats.forEach(sc=>sc.books.forEach(b=>{
+    if((state.books[b.id]||{}).status==='reading') reading.push(b);
+  })));
+  if(reading.length===0){banner.classList.remove('has-books');return;}
+  banner.classList.add('has-books');
+  container.innerHTML=reading.map(b=>`
+    <div class="cr-book" onclick="openJournal('${b.id}',{stopPropagation:()=>{}})">
+      <div class="cr-dot"></div>
+      <div><div class="cr-book-title">${b.t}</div><div class="cr-book-author">${b.a}</div></div>
+    </div>`).join('');
+}
+
+// ════════════════════════════════════════════
+// GOALS
+// ════════════════════════════════════════════
+function updateGoalBar() {
+  const bar=document.getElementById('goals-bar');
+  if(!state.goal){bar.classList.add('hidden');document.getElementById('goal-settings-hint').textContent='Not set';return;}
+  bar.classList.remove('hidden');
+  const year=new Date().getFullYear();
+  const done=Object.values(state.books).filter(u=>u.status==='done'&&u.end&&u.end.startsWith(year)).length;
+  const pct=Math.min(100,Math.round(done/state.goal*100));
+  document.getElementById('goal-title').textContent=`${year} reading goal`;
+  document.getElementById('goal-sub').textContent=`${done} of ${state.goal} books`;
+  document.getElementById('goal-fill').style.width=pct+'%';
+  document.getElementById('goal-pct').textContent=pct+'% complete';
+  document.getElementById('goal-settings-hint').textContent=`${state.goal} books in ${year} · ${done} done`;
+}
+function openGoalModal(){
+  document.getElementById('goal-year').textContent=new Date().getFullYear();
+  document.getElementById('goal-input').value=state.goal||'';
+  document.getElementById('gmodal').classList.add('open');
+}
+function closeGoalModal(){document.getElementById('gmodal').classList.remove('open');}
+function saveGoal(){
+  const v=parseInt(document.getElementById('goal-input').value);
+  if(!v||v<1){toast('Enter a valid number');return;}
+  state.goal=v; persist(); updateGoalBar(); closeGoalModal();
+  toast(`Goal set: ${v} books this year`);
+}
+function clearGoal(){state.goal=0;persist();updateGoalBar();closeGoalModal();toast('Goal removed');}
+
+// ════════════════════════════════════════════
+// FILTER + SEARCH
+// ════════════════════════════════════════════
+let currentFilter='all';
+function setFilter(f,btn){
+  currentFilter=f;
+  document.querySelectorAll('.filter-pill').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on'); applyFilters();
+}
+function applyFilters(){
+  const q=document.getElementById('search').value.trim().toLowerCase();
+  document.querySelectorAll('.book-row').forEach(row=>{
+    const s=row.dataset.status, r=row.dataset.review;
+    const title=row.dataset.title||'', author=row.dataset.author||'';
+    let show=true;
+    if(currentFilter==='reading') show=s==='reading';
+    else if(currentFilter==='done') show=s==='done';
+    else if(currentFilter==='unread') show=s==='idle';
+    else if(currentFilter==='reviewed') show=r==='1';
+    if(show&&q) show=title.includes(q)||author.includes(q);
+    row.classList.toggle('hidden',!show);
+  });
+  document.querySelectorAll('.cat.open .cat-body').forEach(b=>b.style.maxHeight=b.scrollHeight+'px');
+  document.querySelectorAll('.subcat.open .subcat-body').forEach(b=>b.style.maxHeight=b.scrollHeight+'px');
+}
+
+// ════════════════════════════════════════════
+// JOURNAL MODAL
+// ════════════════════════════════════════════
+let activeId=null, pendingRating=0;
+function openJournal(id,e){
+  e.stopPropagation();
+  activeId=id;
+  let book=null;
+  CATS.forEach(cat=>cat.subcats.forEach(sc=>sc.books.forEach(b=>{if(b.id===id)book=b;})));
+  if(!book) return;
+  const u=getBook(id); pendingRating=u.rating||0;
+  document.getElementById('jm-title').textContent=book.t;
+  document.getElementById('jm-meta').textContent=book.a+' · '+fmtYear(book.d)+' · '+book.p+'pp';
+  document.getElementById('m-start').value=u.start||'';
+  document.getElementById('m-end').value=u.end||'';
+  document.getElementById('m-review').value=u.review||'';
+  ['idle','reading','done'].forEach(s=>{document.getElementById('ms-'+s).className='sopt'+(u.status===s?' sel-'+s:'');});
+  renderStarRow(pendingRating);
+  document.getElementById('jmodal').classList.add('open');
+}
+function closeJournal(){document.getElementById('jmodal').classList.remove('open');activeId=null;}
+function mStatus(s){
+  ['idle','reading','done'].forEach(o=>document.getElementById('ms-'+o).className='sopt'+(s===o?' sel-'+s:''));
+  if(s==='reading'&&!document.getElementById('m-start').value) document.getElementById('m-start').value=today();
+  if(s==='done'&&!document.getElementById('m-end').value) document.getElementById('m-end').value=today();
+}
+function getModalStatus(){
+  for(const s of['idle','reading','done']) if(document.getElementById('ms-'+s).className.includes('sel-')) return s;
+  return 'idle';
+}
+function saveJournal(){
+  if(!activeId) return;
+  const u=getBook(activeId);
+  u.status=getModalStatus(); u.start=document.getElementById('m-start').value;
+  u.end=document.getElementById('m-end').value; u.rating=pendingRating;
+  u.review=document.getElementById('m-review').value.trim();
+  state.books[activeId]=u; persist();
+  refreshRow(activeId,u); renderCurrentlyReading();
+  closeJournal(); toast('Journal entry saved ✓');
+}
+function renderStarRow(r){
+  const row=document.getElementById('star-row'); row.innerHTML='';
+  for(let i=1;i<=5;i++){
+    const s=document.createElement('span');
+    s.className='si-inp'+(r>=i?' lit':r>=i-.5?' hlf':'');
+    s.textContent='★'; s.dataset.v=i;
+    s.addEventListener('mousemove',onStarHov); s.addEventListener('click',onStarClick);
+    row.appendChild(s);
+  }
+  const hints=['','Disappointing','Fair','Good','Excellent','Masterpiece'];
+  document.getElementById('star-label').textContent=r>0?hints[Math.ceil(r)]+' ('+r+'/5)':'Hover & click — left half = ½ star';
+}
+function onStarHov(e){
+  const half=e.clientX<e.currentTarget.getBoundingClientRect().left+e.currentTarget.getBoundingClientRect().width/2;
+  renderStarRow(parseInt(e.currentTarget.dataset.v)-(half?.5:0));
+}
+function starLeave(){renderStarRow(pendingRating);}
+function onStarClick(e){
+  const half=e.clientX<e.currentTarget.getBoundingClientRect().left+e.currentTarget.getBoundingClientRect().width/2;
+  pendingRating=parseInt(e.currentTarget.dataset.v)-(half?.5:0);
+  renderStarRow(pendingRating);
+}
+
+// ════════════════════════════════════════════
+// TIMELINE
+// ════════════════════════════════════════════
+function renderTimeline(){
+  const cont=document.getElementById('timeline-content'); cont.innerHTML='';
+  const finished=[];
+  CATS.forEach(cat=>cat.subcats.forEach(sc=>sc.books.forEach(b=>{
+    const u=state.books[b.id]||{};
+    if(u.status==='done') finished.push({...b,...u});
+  })));
+  finished.sort((a,b)=>b.end>a.end?1:-1);
+  if(finished.length===0){cont.innerHTML='<div class="timeline-empty">No finished books yet.<br>Mark your first book as done to see your timeline.</div>';return;}
+  let lastYear='';
+  finished.forEach(item=>{
+    const year=item.end?item.end.slice(0,4):'Unknown';
+    if(year!==lastYear){cont.insertAdjacentHTML('beforeend',`<div class="timeline-year">${year}</div>`);lastYear=year;}
+    cont.insertAdjacentHTML('beforeend',`<div class="timeline-item">
+      <div class="tl-date">${item.end||'—'}</div>
+      <div class="tl-dot"></div>
+      <div class="tl-info">
+        <div class="tl-title">${item.t}</div>
+        <div class="tl-author">${item.a} · ${fmtYear(item.d)} · ${item.p}pp</div>
+        ${item.rating>0?`<div class="tl-stars">${starsHTML(item.rating)}</div>`:''}
+        ${item.review?`<div class="tl-snip">"${item.review.slice(0,160)}${item.review.length>160?'…':''}"</div>`:''}
+      </div>
+    </div>`);
+  });
+}
+
+// ════════════════════════════════════════════
+// WISHLIST
+// ════════════════════════════════════════════
+function toggleWishForm(){document.getElementById('wish-form').classList.toggle('open');}
+function addWish(){
+  const title=document.getElementById('wish-title').value.trim();
+  const author=document.getElementById('wish-author').value.trim();
+  const note=document.getElementById('wish-note').value.trim();
+  if(!title){toast('Please enter a title');return;}
+  state.wishlist=state.wishlist||[];
+  state.wishlist.unshift({id:'w-'+Date.now(),title,author,note});
+  persist(); renderWishlist();
+  document.getElementById('wish-title').value='';
+  document.getElementById('wish-author').value='';
+  document.getElementById('wish-note').value='';
+  toggleWishForm(); toast('Added to wishlist ✦');
+}
+function removeWish(id){
+  state.wishlist=state.wishlist.filter(w=>w.id!==id);
+  persist(); renderWishlist(); toast('Removed from wishlist');
+}
+function renderWishlist(){
+  const cont=document.getElementById('wish-list');
+  const wl=state.wishlist||[];
+  if(wl.length===0){cont.innerHTML='<div class="wishlist-empty">Your wishlist is empty.<br>Add books you want to read beyond the main library.</div>';return;}
+  cont.innerHTML=wl.map(w=>`<div class="wish-item">
+    <div class="wish-item-info">
+      <div class="wish-title">${w.title}</div>
+      ${w.author?`<div class="wish-author">${w.author}</div>`:''}
+      ${w.note?`<div class="wish-note">${w.note}</div>`:''}
+    </div>
+    <button class="wish-remove" onclick="removeWish('${w.id}')" title="Remove">✕</button>
+  </div>`).join('');
+}
+
+// ════════════════════════════════════════════
+// SETTINGS
+// ════════════════════════════════════════════
+function goSettingsTab(tab,el){
+  document.querySelectorAll('.settings-nav-item').forEach(i=>i.classList.remove('active'));
+  document.querySelectorAll('.settings-panel').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('sp-'+tab).classList.add('active');
+}
+function loadSettingsUI(){
+  // Theme
+  ['dark','light','sepia'].forEach(t=>document.getElementById('theme-'+t).classList.toggle('on',state.theme===t));
+  // Font
+  ['inter','merriweather','lora','serif4','dmsans','crimson'].forEach(f=>document.getElementById('font-'+f).classList.toggle('on',state.font===f));
+  // Size
+  ['sm','md','lg','xl'].forEach(s=>document.getElementById('size-'+s).classList.toggle('on',state.size===s));
+  // Toggles
+  document.getElementById('tog-notes').checked=state.showNotes!==false;
+  document.getElementById('tog-pages').checked=state.showPages!==false;
+  document.getElementById('tog-compact').checked=!!state.compact;
+  document.getElementById('tog-public').checked=!!state.publicProfile;
+  document.getElementById('tog-pub-reviews').checked=!!state.publicReviews;
+  document.getElementById('tog-pub-ratings').checked=!!state.publicRatings;
+  updateDisplayName(state.name);
+}
+
+// THEME
+function setTheme(t,el){
+  state.theme=t; persist(); applyTheme(t);
+  document.querySelectorAll('#sp-appearance .opt-row:first-of-type .opt-pill').forEach(p=>p.classList.remove('on'));
+  document.getElementById('theme-'+t).classList.add('on');
+  // sync all theme pills
+  ['dark','light','sepia'].forEach(th=>document.getElementById('theme-'+th).classList.toggle('on',th===t));
+}
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t==='dark'?'':t);
+}
+function cycleTheme(){
+  const themes=['dark','light','sepia'];
+  const next=themes[(themes.indexOf(state.theme)+1)%themes.length];
+  setTheme(next, document.getElementById('theme-'+next));
+}
+
+// FONT
+function setFont(f,el,preview){
+  state.font=f; persist(); applyFont(f);
+  document.querySelectorAll('#sp-appearance .opt-row:nth-of-type(2) .opt-pill').forEach(p=>p.classList.remove('on'));
+  ['inter','merriweather','lora','serif4','dmsans','crimson'].forEach(fn=>document.getElementById('font-'+fn).classList.toggle('on',fn===f));
+  document.getElementById('font-preview').style.fontFamily=preview;
+}
+function applyFont(f){document.documentElement.setAttribute('data-font',f);}
+
+// SIZE
+function setSize(s,el){
+  state.size=s; persist(); applySize(s);
+  ['sm','md','lg','xl'].forEach(sz=>document.getElementById('size-'+sz).classList.toggle('on',sz===s));
+}
+function applySize(s){document.documentElement.setAttribute('data-size',s);}
+
+// PREFS
+function savePref(k,v){
+  state[k]=v; persist();
+  applyPrefs();
+  const dbMap={showNotes:'show_notes',showPages:'show_pages',compact:'compact_mode',publicProfile:'public_profile',publicReviews:'public_reviews',publicRatings:'public_ratings'};
+  const dbKey=dbMap[k]||k;
+  if(typeof syncProfileToSupabase==='function') syncProfileToSupabase({[dbKey]:v});
+}
+function applyPrefs(){
+  const showNotes=state.showNotes!==false;
+  const showPages=state.showPages!==false;
+  const compact=!!state.compact;
+  document.querySelectorAll('.book-note').forEach(el=>el.style.display=showNotes?'':'none');
+  document.querySelectorAll('.pages-chip').forEach(el=>el.style.display=showPages?'':'none');
+  document.querySelectorAll('.book-row').forEach(el=>el.style.paddingTop=compact?'7px':null);
+}
+
+// DISPLAY NAME
+function updateDisplayName(name){
+  state.name=name||'Reader'; persist();
+  document.getElementById('nav-user-label').textContent="— "+state.name+"'s Bookshelf";
+  document.getElementById('nav-avatar').textContent=state.name[0]?.toUpperCase()||'?';
+  if(typeof syncProfileToSupabase==='function') syncProfileToSupabase({first_name:state.name});
+}
+
+// DATA
+function exportData(){
+  const data=JSON.stringify(state,null,2);
+  const blob=new Blob([data],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='the-shelf-backup-'+today()+'.json';
+  a.click(); toast('Backup downloaded ✓');
+}
+function triggerImport(){document.getElementById('import-file').click();}
+function importData(e){
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const parsed=JSON.parse(ev.target.result);
+      state={...state,...parsed}; persist();
+      initApp(); toast('Data imported successfully ✓');
+    }catch{toast('Invalid backup file');}
+  };
+  reader.readAsText(file);
+}
+function confirmReset(){
+  if(!confirm('This will delete all your reading progress, ratings, and reviews. This cannot be undone.\n\nAre you sure?')) return;
+  state.books={}; state.wishlist=[]; state.goal=0; persist();
+  renderCats(); updateStats(); updateGoalBar(); renderCurrentlyReading();
+  toast('All reading data reset');
+}
+
+// ════════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════════
+let toastT;
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('show'),2600);
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</body>
+</html>
