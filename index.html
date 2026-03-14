@@ -688,6 +688,123 @@ body::after {
   .goals-bar { flex-direction:column; align-items:flex-start; gap:10px; }
   .goal-track { width:100%; }
 }
+
+/* ═══ SPRINT 1: SEARCH + BOOK PAGES ══════════════════════ */
+.search-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:600;display:none;flex-direction:column;align-items:center;padding:60px 20px 40px}
+.search-overlay.open{display:flex}
+.search-box-wrap{width:100%;max-width:640px;position:relative;margin-bottom:16px}
+.search-big{width:100%;background:var(--bg2);border:1px solid var(--line3);border-radius:var(--rl);color:var(--text);font-size:18px;padding:16px 20px 16px 52px;outline:none;transition:border-color .15s}
+.search-big:focus{border-color:var(--gold)}
+.search-big::placeholder{color:var(--text3)}
+.search-big-ic{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:20px;pointer-events:none}
+.search-close{position:absolute;right:16px;top:50%;transform:translateY(-50%);background:var(--bg3);border:1px solid var(--line2);color:var(--text3);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.search-close:hover{color:var(--text)}
+.search-results-wrap{width:100%;max-width:640px;flex:1;overflow-y:auto}
+.search-section-label{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--text3);margin:16px 0 8px;padding:0 4px}
+.search-result{display:flex;gap:12px;padding:10px 12px;border-radius:var(--r);cursor:pointer;transition:background .12s;align-items:flex-start}
+.search-result:hover{background:var(--bg3)}
+.sr-cover{width:36px;height:52px;border-radius:4px;object-fit:cover;flex-shrink:0;background:var(--bg4)}
+.sr-cover-placeholder{width:36px;height:52px;border-radius:4px;flex-shrink:0;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:18px}
+.sr-info{flex:1;min-width:0}
+.sr-title{font-size:13px;font-weight:600;line-height:1.3;margin-bottom:2px}
+.sr-author{font-size:11px;color:var(--text3)}
+.sr-meta{font-size:10px;color:var(--text3);margin-top:3px;display:flex;gap:8px;flex-wrap:wrap}
+.sr-genre{padding:1px 6px;background:var(--bg4);border-radius:3px;font-size:9px;font-weight:500;color:var(--text3)}
+.search-loading{text-align:center;padding:40px;color:var(--text3);font-size:13px}
+.search-empty{text-align:center;padding:40px;color:var(--text3);font-size:13px}
+
+/* ── Book page ── */
+#view-book{background:var(--bg);min-height:100vh}
+.book-hero{display:grid;grid-template-columns:200px 1fr;gap:32px;padding:32px 0 28px;align-items:start}
+.book-hero-cover{width:200px;border-radius:var(--rl);overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.4);flex-shrink:0}
+.book-hero-cover img{width:100%;display:block}
+.book-hero-cover-placeholder{width:200px;height:290px;border-radius:var(--rl);background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:48px;color:var(--text3)}
+.book-hero-title{font-size:28px;font-weight:700;line-height:1.2;margin-bottom:6px;letter-spacing:-.02em}
+.book-hero-author{font-size:16px;color:var(--gold);font-weight:500;margin-bottom:12px;cursor:pointer}
+.book-hero-author:hover{text-decoration:underline}
+.book-hero-meta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.book-meta-chip{font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px}
+.book-meta-chip svg{opacity:.5}
+.book-genres{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.book-genre{font-size:11px;font-weight:500;padding:4px 10px;border-radius:20px;border:1px solid var(--line2);color:var(--text3);cursor:pointer;transition:all .15s}
+.book-genre:hover{color:var(--gold);border-color:rgba(200,164,90,.4);background:var(--gold-d)}
+.book-hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+.bha-btn{font-size:12px;font-weight:600;padding:9px 18px;border-radius:var(--r);cursor:pointer;border:1px solid;transition:all .15s}
+.bha-primary{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.bha-primary:hover{background:var(--gold2)}
+.bha-secondary{background:transparent;color:var(--text2);border-color:var(--line2)}
+.bha-secondary:hover{background:var(--bg3);color:var(--text)}
+.bha-reading{background:var(--blue-d);color:var(--blue);border-color:rgba(122,159,200,.4)}
+.bha-done{background:var(--green-d);color:var(--green);border-color:rgba(92,158,122,.4)}
+.book-page-body{display:grid;grid-template-columns:1fr 320px;gap:32px;padding-bottom:60px}
+.book-desc{font-size:14px;line-height:1.75;color:var(--text2);margin-bottom:24px}
+.book-desc.clamped{display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.book-section-title{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.review-card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--rl);padding:16px;margin-bottom:10px}
+.rc-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.rc-avatar{width:32px;height:32px;border-radius:50%;background:var(--gold-d);border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold);flex-shrink:0}
+.rc-name{font-size:13px;font-weight:600}
+.rc-date{font-size:11px;color:var(--text3)}
+.rc-body{font-size:13px;color:var(--text2);line-height:1.6}
+.rc-spoiler{font-size:12px;color:var(--text3);font-style:italic;cursor:pointer}
+.write-review-area{background:var(--bg2);border:1px solid var(--line2);border-radius:var(--rl);padding:16px;margin-bottom:20px}
+.community-rating{text-align:center;padding:20px;background:var(--bg2);border:1px solid var(--line);border-radius:var(--rl);margin-bottom:16px}
+.cr-big-num{font-size:48px;font-weight:700;color:var(--gold);line-height:1;letter-spacing:-.03em}
+.cr-stars-row{display:flex;justify-content:center;gap:3px;margin:6px 0 4px}
+.cr-count{font-size:12px;color:var(--text3)}
+.rating-bars{margin-top:12px}
+.rating-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.rbl{font-size:11px;color:var(--text3);width:8px;text-align:right}
+.rb-track{flex:1;height:6px;background:var(--bg4);border-radius:3px;overflow:hidden}
+.rb-fill{height:100%;background:var(--gold);border-radius:3px}
+.rb-count{font-size:10px;color:var(--text3);width:24px}
+.also-enjoyed{margin-top:0}
+.ae-book{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);cursor:pointer;transition:background .12s;border-radius:var(--r);padding:8px}
+.ae-book:hover{background:var(--bg3)}
+.ae-book:last-child{border-bottom:none}
+.ae-cover{width:36px;height:52px;border-radius:4px;object-fit:cover;flex-shrink:0;background:var(--bg4)}
+.ae-title{font-size:12px;font-weight:600;line-height:1.3;margin-bottom:2px}
+.ae-author{font-size:11px;color:var(--text3)}
+
+/* ── Author page ── */
+.author-hero{display:grid;grid-template-columns:120px 1fr;gap:24px;padding:32px 0 28px;align-items:start}
+.author-photo{width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid var(--line2)}
+.author-photo-placeholder{width:120px;height:120px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:40px;color:var(--text3);border:3px solid var(--line2)}
+.author-name{font-size:26px;font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
+.author-dates{font-size:13px;color:var(--text3);margin-bottom:12px}
+.author-bio{font-size:13px;line-height:1.7;color:var(--text2);margin-bottom:16px}
+.author-bio.clamped{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.follow-btn{font-size:12px;font-weight:600;padding:8px 20px;border-radius:var(--r);border:1px solid;cursor:pointer;transition:all .15s}
+.follow-btn.following{background:var(--gold-d);color:var(--gold);border-color:rgba(200,164,90,.4)}
+.follow-btn.not-following{background:transparent;color:var(--text2);border-color:var(--line2)}
+.follow-btn.not-following:hover{background:var(--bg3);color:var(--text)}
+.books-grid-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:16px;margin-top:0}
+.book-card-small{cursor:pointer;transition:transform .15s}
+.book-card-small:hover{transform:translateY(-2px)}
+.bcs-cover{width:100%;aspect-ratio:2/3;border-radius:var(--r);object-fit:cover;background:var(--bg3);margin-bottom:8px;display:block}
+.bcs-title{font-size:12px;font-weight:600;line-height:1.3;margin-bottom:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.bcs-year{font-size:11px;color:var(--text3)}
+
+/* ── Nav search button ── */
+.nav-search-btn{font-size:13px;color:var(--text3);background:var(--bg3);border:1px solid var(--line2);border-radius:var(--r);padding:5px 12px 5px 10px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .15s;font-weight:400;white-space:nowrap}
+.nav-search-btn:hover{color:var(--text);border-color:var(--line3)}
+.nav-search-btn kbd{font-size:10px;background:var(--bg4);border:1px solid var(--line2);border-radius:3px;padding:1px 5px;color:var(--text3)}
+
+/* ── Back button ── */
+.back-btn{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--text3);cursor:pointer;padding:6px 0;margin-bottom:8px;transition:color .15s;background:none;border:none}
+.back-btn:hover{color:var(--text)}
+
+@media(max-width:700px){
+  .book-hero{grid-template-columns:120px 1fr;gap:16px}
+  .book-hero-cover,.book-hero-cover img{width:120px}
+  .book-hero-cover-placeholder{width:120px;height:174px}
+  .book-hero-title{font-size:20px}
+  .book-page-body{grid-template-columns:1fr}
+  .author-hero{grid-template-columns:80px 1fr;gap:16px}
+  .author-photo,.author-photo-placeholder{width:80px;height:80px}
+  .books-grid-cards{grid-template-columns:repeat(auto-fill,minmax(100px,1fr))}
+}
+
 </style>
 </head>
 <body>
@@ -742,6 +859,7 @@ body::after {
       <button class="nav-tab" id="tab-wishlist" onclick="goView('wishlist')"><span>✦ </span>Wishlist</button>
       <button class="nav-tab" id="tab-settings" onclick="goView('settings')"><span>⚙ </span>Settings</button>
     </div>
+    <button class="nav-search-btn" onclick="openSearch()">⌕ Search <kbd>⌘K</kbd></button>
     <div class="nav-right">
       <button class="icon-btn" id="theme-toggle-btn" onclick="cycleTheme()" title="Toggle theme">◑</button>
       <div class="nav-avatar" id="nav-avatar" onclick="goView('settings')">K</div>
@@ -1961,6 +2079,542 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.log('SW failed:', err));
   });
 }
+
+// ══════════════════════════════════════════════════════════
+// SPRINT 1 — OPEN LIBRARY + BOOK PAGES + ROUTING
+// ══════════════════════════════════════════════════════════
+
+const OL = 'https://openlibrary.org';
+const OL_COVERS = 'https://covers.openlibrary.org/b';
+
+// ── URL Router ───────────────────────────────────────────
+function getRoute() {
+  const hash = window.location.hash.replace('#', '') || '/';
+  if (hash.startsWith('/book/')) return { page: 'book', id: hash.replace('/book/', '') };
+  if (hash.startsWith('/author/')) return { page: 'author', id: hash.replace('/author/', '') };
+  if (hash.startsWith('/search/')) return { page: 'search', q: decodeURIComponent(hash.replace('/search/', '')) };
+  return { page: 'library' };
+}
+
+function navigate(path) {
+  window.location.hash = path;
+}
+
+window.addEventListener('hashchange', () => {
+  const route = getRoute();
+  handleRoute(route);
+});
+
+function handleRoute(route) {
+  if (route.page === 'book') {
+    showBookPage(route.id);
+  } else if (route.page === 'author') {
+    showAuthorPage(route.id);
+  } else {
+    goView('library');
+  }
+}
+
+// ── Search ───────────────────────────────────────────────
+let searchTimer = null;
+let lastQuery = '';
+
+function openSearch() {
+  document.getElementById('search-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('search-big-input').focus(), 100);
+}
+function closeSearch() {
+  document.getElementById('search-overlay').classList.remove('open');
+  document.getElementById('search-big-input').value = '';
+  document.getElementById('search-results-inner').innerHTML = `<div class="search-empty" style="margin-top:40px"><div style="font-size:32px;margin-bottom:12px;opacity:.4">📚</div>Search any book — over 20 million titles available</div>`;
+}
+function handleSearchBgClick(e) {
+  if (e.target.id === 'search-overlay') closeSearch();
+}
+
+// Keyboard shortcut
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
+  if (e.key === 'Escape') closeSearch();
+});
+
+function onSearchInput(val) {
+  clearTimeout(searchTimer);
+  if (val.trim().length < 2) return;
+  searchTimer = setTimeout(() => runSearch(val.trim()), 350);
+}
+
+async function runSearch(q) {
+  if (q === lastQuery) return;
+  lastQuery = q;
+  const inner = document.getElementById('search-results-inner');
+  inner.innerHTML = '<div class="search-loading">Searching…</div>';
+
+  try {
+    const res = await fetch(`${OL}/search.json?q=${encodeURIComponent(q)}&limit=12&fields=key,title,author_name,author_key,cover_i,first_publish_year,number_of_pages_median,subject&lang=en`);
+    const data = await res.json();
+    renderSearchResults(data.docs || [], q);
+  } catch(e) {
+    inner.innerHTML = '<div class="search-empty">Search failed — check your connection</div>';
+  }
+}
+
+function renderSearchResults(docs, q) {
+  const inner = document.getElementById('search-results-inner');
+  if (docs.length === 0) {
+    inner.innerHTML = `<div class="search-empty">No results for "${q}"</div>`;
+    return;
+  }
+
+  let html = `<div class="search-section-label">Books found for "${q}"</div>`;
+  docs.forEach(doc => {
+    const cover = doc.cover_i ? `<img class="sr-cover" src="${OL_COVERS}/id/${doc.cover_i}-S.jpg" loading="lazy">` : `<div class="sr-cover-placeholder">📖</div>`;
+    const author = doc.author_name?.[0] || 'Unknown author';
+    const year = doc.first_publish_year || '';
+    const pages = doc.number_of_pages_median ? `${doc.number_of_pages_median}pp` : '';
+    const subjects = (doc.subject || []).slice(0, 3).map(s => `<span class="sr-genre">${s}</span>`).join('');
+    const bookId = doc.key.replace('/works/', '');
+    html += `<div class="search-result" onclick="openBookFromSearch('${bookId}', ${JSON.stringify(doc).replace(/'/g,"&#39;").replace(/"/g,'&quot;')})">
+      ${cover}
+      <div class="sr-info">
+        <div class="sr-title">${escHtml(doc.title)}</div>
+        <div class="sr-author">${escHtml(author)}</div>
+        <div class="sr-meta">${year?`<span>${year}</span>`:''}${pages?`<span>${pages}</span>`:''}</div>
+        ${subjects?`<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">${subjects}</div>`:''}
+      </div>
+    </div>`;
+  });
+
+  inner.innerHTML = html;
+}
+
+function escHtml(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+async function openBookFromSearch(bookId, docData) {
+  closeSearch();
+  // Cache basic data from search result
+  const cached = {
+    id: bookId,
+    title: docData.title,
+    author: docData.author_name?.[0] || 'Unknown',
+    author_key: docData.author_key?.[0]?.replace('/authors/','') || null,
+    cover_url: docData.cover_i ? `${OL_COVERS}/id/${docData.cover_i}-L.jpg` : null,
+    first_publish_year: docData.first_publish_year || null,
+    page_count: docData.number_of_pages_median || null,
+    genres: (docData.subject || []).slice(0, 8),
+    ol_key: bookId,
+  };
+  navigate('/book/' + bookId);
+}
+
+// ── Book Page ─────────────────────────────────────────────
+let currentBookData = null;
+
+async function showBookPage(bookId) {
+  // Show views
+  document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-book').style.display = 'block';
+  const content = document.getElementById('book-page-content');
+  content.innerHTML = '<div class="empty-state" style="padding:80px 0"><div style="font-size:28px;margin-bottom:8px">📖</div>Loading book…</div>';
+
+  try {
+    // Fetch from Open Library
+    const [workRes, ratingsRes] = await Promise.all([
+      fetch(`${OL}/works/${bookId}.json`),
+      fetch(`${OL}/works/${bookId}/ratings.json`).catch(() => null)
+    ]);
+    const work = await workRes.json();
+    const ratingsData = ratingsRes ? await ratingsRes.json().catch(()=>null) : null;
+
+    // Get description
+    let desc = '';
+    if (work.description) {
+      desc = typeof work.description === 'string' ? work.description : (work.description.value || '');
+    }
+
+    // Get cover
+    const coverId = work.covers?.[0];
+    const coverUrl = coverId ? `${OL_COVERS}/id/${coverId}-L.jpg` : null;
+
+    // Get author info
+    let authorName = 'Unknown author';
+    let authorKey = null;
+    if (work.authors?.[0]?.author?.key) {
+      authorKey = work.authors[0].author.key.replace('/authors/', '');
+      try {
+        const authRes = await fetch(`${OL}/authors/${authorKey}.json`);
+        const authData = await authRes.json();
+        authorName = authData.name || authorName;
+      } catch(e) {}
+    }
+
+    // Genres from subjects
+    const genres = (work.subjects || []).slice(0, 10);
+    const year = work.first_publish_date || '';
+
+    currentBookData = {
+      id: bookId,
+      title: work.title,
+      author: authorName,
+      author_key: authorKey,
+      cover_url: coverUrl,
+      description: desc,
+      genres,
+      year,
+      ol_key: bookId,
+    };
+
+    // Cache in Supabase
+    if (CURRENT_USER) {
+      sb.from('books').upsert({
+        id: bookId, title: work.title, author: authorName,
+        author_key: authorKey, cover_url: coverUrl,
+        description: desc, genres: genres,
+        first_publish_year: parseInt(year) || null,
+        ol_key: bookId
+      }, { onConflict: 'id' }).then(() => {});
+    }
+
+    // Get community reviews for this book
+    const { data: reviews } = await sb.from('book_logs')
+      .select('user_id, rating, review, date_finished, profiles(first_name)')
+      .eq('book_id', bookId)
+      .gt('rating', 0)
+      .order('date_finished', { ascending: false })
+      .limit(10);
+
+    // User's own log
+    const userLog = state.books[bookId] || {};
+    const avgRating = ratingsData?.summary?.average || 0;
+    const ratingsCount = ratingsData?.summary?.count || 0;
+
+    renderBookPage(content, currentBookData, userLog, reviews || [], avgRating, ratingsCount);
+  } catch(e) {
+    content.innerHTML = `<div class="empty-state"><span class="e-icon">⚠️</span>Couldn't load this book.<br><button class="save-btn" style="width:auto;padding:8px 16px;margin-top:12px;font-size:12px" onclick="history.back()">Go back</button></div>`;
+  }
+}
+
+function renderBookPage(container, book, userLog, reviews, avgRating, ratingsCount) {
+  const status = userLog.status || 'idle';
+  const coverHTML = book.cover_url
+    ? `<div class="book-hero-cover"><img src="${book.cover_url}" alt="${escHtml(book.title)}" loading="lazy"></div>`
+    : `<div class="book-hero-cover-placeholder">📖</div>`;
+
+  const heroActionsHTML = `
+    <button class="bha-btn ${status==='idle'?'bha-secondary':status==='reading'?'bha-reading':'bha-done'}" id="bp-status-btn" onclick="cycleBookPageStatus('${book.id}')">
+      ${status==='idle'?'+ Want to read':status==='reading'?'● Reading now':'✓ Finished'}
+    </button>
+    <button class="bha-btn bha-secondary" onclick="openJournalForBook('${book.id}')">Write review ✎</button>`;
+
+  const starsAvg = avgRating > 0 ? starsHTML(Math.round(avgRating * 2) / 2) : '';
+
+  const genresHTML = book.genres.slice(0,8).map(g =>
+    `<span class="book-genre" onclick="searchByGenre('${escHtml(g)}')">${escHtml(g)}</span>`
+  ).join('');
+
+  const reviewsHTML = reviews.length > 0 ? reviews.map(r => {
+    const name = r.profiles?.first_name || 'Reader';
+    const initials = name[0]?.toUpperCase() || '?';
+    return `<div class="review-card">
+      <div class="rc-head">
+        <div class="rc-avatar">${initials}</div>
+        <div><div class="rc-name">${escHtml(name)}</div><div class="rc-date">${r.date_finished || ''}</div></div>
+        ${r.rating > 0 ? `<div class="book-stars" style="margin-left:auto">${starsHTML(r.rating)}</div>` : ''}
+      </div>
+      ${r.review ? `<div class="rc-body">${escHtml(r.review.slice(0, 400))}${r.review.length > 400 ? '…' : ''}</div>` : ''}
+    </div>`;
+  }).join('') : '<div style="font-size:13px;color:var(--text3);padding:12px 0">No reviews yet — be the first!</div>';
+
+  const ratingBarHTML = avgRating > 0 ? `
+    <div class="community-rating">
+      <div class="cr-big-num">${avgRating.toFixed(1)}</div>
+      <div class="cr-stars-row">${starsHTML(Math.round(avgRating * 2) / 2)}</div>
+      <div class="cr-count">${ratingsCount.toLocaleString()} ratings</div>
+    </div>` : '<div style="font-size:12px;color:var(--text3);text-align:center;padding:16px">No community ratings yet</div>';
+
+  const userRatingHTML = userLog.rating > 0 ? `
+    <div style="background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
+      <span style="font-size:12px;font-weight:600">Your rating</span>
+      <div class="book-stars">${starsHTML(userLog.rating)}</div>
+    </div>` : '';
+
+  container.innerHTML = `
+    <button class="back-btn" onclick="navigateBack()">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,1 3,7 9,13"/></svg>
+      Back
+    </button>
+    <div class="book-hero">
+      ${coverHTML}
+      <div>
+        <h1 class="book-hero-title">${escHtml(book.title)}</h1>
+        ${book.author_key
+          ? `<div class="book-hero-author" onclick="navigate('/author/${book.author_key}')">${escHtml(book.author)}</div>`
+          : `<div class="book-hero-author" style="cursor:default">${escHtml(book.author)}</div>`}
+        <div class="book-hero-meta">
+          ${book.year ? `<span class="book-meta-chip">📅 ${book.year}</span>` : ''}
+          ${avgRating > 0 ? `<span class="book-meta-chip">⭐ ${avgRating.toFixed(1)}</span>` : ''}
+        </div>
+        <div class="book-genres">${genresHTML}</div>
+        <div class="book-hero-actions">${heroActionsHTML}</div>
+      </div>
+    </div>
+    <div class="book-page-body">
+      <div>
+        <div class="book-section-title">About this book</div>
+        ${book.description
+          ? `<div class="book-desc clamped" id="book-desc-text">${escHtml(book.description)}</div>
+             <button onclick="toggleDesc()" id="book-desc-toggle" style="font-size:12px;color:var(--gold);background:none;border:none;cursor:pointer;margin-top:6px;margin-bottom:24px;padding:0">Show more</button>`
+          : '<div class="book-desc" style="margin-bottom:24px;color:var(--text3)">No description available for this book.</div>'}
+        <div class="book-section-title" style="margin-top:8px">Reviews from The Shelf</div>
+        ${userRatingHTML}
+        ${reviewsHTML}
+      </div>
+      <div>
+        ${ratingBarHTML}
+        <div class="book-section-title" style="margin-top:16px">Add to your shelf</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          ${['idle','reading','done'].map(s => `
+            <button class="bha-btn ${status===s?(s==='done'?'bha-done':s==='reading'?'bha-reading':'bha-secondary bha-secondary-active'):'bha-secondary'}" onclick="setBookStatus('${book.id}','${s}')" style="text-align:left;padding:10px 14px">
+              ${s==='idle'?'Want to read':s==='reading'?'● Currently reading':'✓ Finished'}
+            </button>`).join('')}
+        </div>
+        ${userLog.rating > 0 ? `<div style="margin-top:16px"><div class="book-section-title">Your rating</div><div class="book-stars" style="margin-bottom:12px">${starsHTML(userLog.rating)}</div></div>` : ''}
+        <button class="bha-btn bha-secondary" style="width:100%;margin-top:12px;text-align:center;padding:10px" onclick="openJournalForBook('${book.id}')">
+          ${userLog.review ? 'Edit your review ✎' : 'Write a review ✎'}
+        </button>
+      </div>
+    </div>`;
+}
+
+function toggleDesc() {
+  const el = document.getElementById('book-desc-text');
+  const btn = document.getElementById('book-desc-toggle');
+  if (el.classList.contains('clamped')) {
+    el.classList.remove('clamped');
+    btn.textContent = 'Show less';
+  } else {
+    el.classList.add('clamped');
+    btn.textContent = 'Show more';
+  }
+}
+
+async function cycleBookPageStatus(bookId) {
+  const u = state.books[bookId] || {};
+  const cycle = { idle: 'reading', reading: 'done', done: 'idle' };
+  const newStatus = cycle[u.status || 'idle'];
+
+  // Set title/author from current book data
+  if (currentBookData) {
+    u.book_title = currentBookData.title;
+    u.book_author = currentBookData.author;
+    u.book_cover = currentBookData.cover_url;
+  }
+
+  const newStart = newStatus === 'reading' && !u.start ? today() : (newStatus === 'idle' ? null : u.start || null);
+  const newEnd = newStatus === 'done' && !u.end ? today() : (newStatus === 'idle' ? null : u.end || null);
+  const updated = { ...u, status: newStatus, start: newStart, end: newEnd };
+  state.books[bookId] = updated;
+
+  await sb.from('book_logs').upsert({
+    user_id: CURRENT_USER.id, book_id: bookId,
+    status: newStatus, rating: u.rating || 0,
+    review: u.review || '', date_started: newStart, date_finished: newEnd,
+    book_title: currentBookData?.title, book_author: currentBookData?.author,
+    book_cover: currentBookData?.cover_url, is_custom: true,
+    updated_at: new Date().toISOString()
+  }, { onConflict: 'user_id,book_id' });
+
+  const btn = document.getElementById('bp-status-btn');
+  if (btn) {
+    btn.className = `bha-btn ${newStatus==='reading'?'bha-reading':newStatus==='done'?'bha-done':'bha-secondary'}`;
+    btn.textContent = newStatus==='idle'?'+ Want to read':newStatus==='reading'?'● Reading now':'✓ Finished';
+  }
+  persist(); renderCR(); updateStats();
+  toast(newStatus==='done'?'Marked as finished ✓':newStatus==='reading'?'Added to reading list':'Removed from shelf');
+}
+
+async function setBookStatus(bookId, newStatus) {
+  const u = state.books[bookId] || {};
+  const newStart = newStatus === 'reading' && !u.start ? today() : (newStatus === 'idle' ? null : u.start || null);
+  const newEnd = newStatus === 'done' && !u.end ? today() : (newStatus === 'idle' ? null : u.end || null);
+  const updated = { ...u, status: newStatus, start: newStart, end: newEnd };
+  if (currentBookData) {
+    updated.book_title = currentBookData.title;
+    updated.book_author = currentBookData.author;
+    updated.book_cover = currentBookData.cover_url;
+  }
+  state.books[bookId] = updated;
+  await sb.from('book_logs').upsert({
+    user_id: CURRENT_USER.id, book_id: bookId,
+    status: newStatus, rating: u.rating || 0, review: u.review || '',
+    date_started: newStart, date_finished: newEnd,
+    book_title: currentBookData?.title, book_author: currentBookData?.author,
+    book_cover: currentBookData?.cover_url, is_custom: true,
+    updated_at: new Date().toISOString()
+  }, { onConflict: 'user_id,book_id' });
+  persist(); renderCR(); updateStats();
+  // Re-render the sidebar status buttons
+  showBookPage(bookId);
+}
+
+function openJournalForBook(bookId) {
+  // If book is from OL (not in CATS), inject a fake entry so modal works
+  if (currentBookData && !findBookInCats(bookId)) {
+    state.books[bookId] = state.books[bookId] || { status: 'idle', rating: 0, review: '', start: null, end: null };
+    // Temporarily patch the modal
+    document.getElementById('jm-title').textContent = currentBookData.title;
+    document.getElementById('jm-meta').textContent = currentBookData.author + (currentBookData.year ? ' · ' + currentBookData.year : '');
+    const u = state.books[bookId] || {};
+    activeBookId = bookId;
+    pendingRating = u.rating || 0;
+    document.getElementById('m-start').value = u.start || '';
+    document.getElementById('m-end').value = u.end || '';
+    document.getElementById('m-review').value = u.review || '';
+    ['idle','reading','done'].forEach(s => {
+      document.getElementById('ms-'+s).className = 'sopt' + ((u.status||'idle')===s ? ' sel-'+s : '');
+    });
+    renderStarRow(pendingRating);
+    document.getElementById('jmodal').classList.add('open');
+  } else {
+    openJournal(bookId, { stopPropagation: () => {} });
+  }
+}
+
+function findBookInCats(id) {
+  let found = null;
+  CATS.forEach(c => c.subcats.forEach(s => s.books.forEach(b => { if (b.id === id) found = b; })));
+  return found;
+}
+
+function searchByGenre(genre) {
+  openSearch();
+  document.getElementById('search-big-input').value = genre;
+  runSearch(genre);
+}
+
+function navigateBack() {
+  if (window.history.length > 1) history.back();
+  else navigate('/');
+}
+
+// ── Author Page ───────────────────────────────────────────
+async function showAuthorPage(authorKey) {
+  document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-author').style.display = 'block';
+  const content = document.getElementById('author-page-content');
+  content.innerHTML = '<div class="empty-state" style="padding:80px 0"><div style="font-size:28px;margin-bottom:8px">✍️</div>Loading author…</div>';
+
+  try {
+    const [authorRes, worksRes] = await Promise.all([
+      fetch(`${OL}/authors/${authorKey}.json`),
+      fetch(`${OL}/authors/${authorKey}/works.json?limit=12`)
+    ]);
+    const author = await authorRes.json();
+    const worksData = await worksRes.json();
+
+    const name = author.name || 'Unknown Author';
+    const bio = author.bio ? (typeof author.bio === 'string' ? author.bio : author.bio.value || '') : '';
+    const photoId = author.photos?.[0];
+    const photoUrl = photoId ? `${OL_COVERS}/a/id/${photoId}-L.jpg` : null;
+    const birth = author.birth_date || '';
+    const death = author.death_date || '';
+    const works = worksData.entries || [];
+
+    // Check follow status
+    const { data: followData } = CURRENT_USER ? await sb.from('friendships')
+      .select('id').eq('requester_id', CURRENT_USER.id).eq('addressee_id', 'author_' + authorKey).maybeSingle()
+      : { data: null };
+    const isFollowing = !!followData;
+
+    const photoHTML = photoUrl
+      ? `<img class="author-photo" src="${photoUrl}" alt="${escHtml(name)}" loading="lazy">`
+      : `<div class="author-photo-placeholder">✍️</div>`;
+
+    const booksGridHTML = works.map(w => {
+      const wId = w.key.replace('/works/', '');
+      const coverId = w.covers?.[0];
+      const coverSrc = coverId ? `${OL_COVERS}/id/${coverId}-M.jpg` : null;
+      return `<div class="book-card-small" onclick="navigate('/book/${wId}')">
+        ${coverSrc
+          ? `<img class="bcs-cover" src="${coverSrc}" loading="lazy" alt="${escHtml(w.title)}">`
+          : `<div class="bcs-cover" style="display:flex;align-items:center;justify-content:center;font-size:28px">📖</div>`}
+        <div class="bcs-title">${escHtml(w.title)}</div>
+        ${w.first_publish_year ? `<div class="bcs-year">${w.first_publish_year}</div>` : ''}
+      </div>`;
+    }).join('');
+
+    content.innerHTML = `
+      <button class="back-btn" onclick="navigateBack()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,1 3,7 9,13"/></svg>
+        Back
+      </button>
+      <div class="author-hero">
+        ${photoHTML}
+        <div>
+          <h1 class="author-name">${escHtml(name)}</h1>
+          ${birth || death ? `<div class="author-dates">${birth}${birth && death ? ' – ' : ''}${death}</div>` : ''}
+          ${bio ? `<div class="author-bio clamped" id="author-bio-text">${escHtml(bio.slice(0, 600))}${bio.length > 600 ? '…' : ''}</div>
+            <button onclick="toggleAuthorBio()" id="author-bio-btn" style="font-size:12px;color:var(--gold);background:none;border:none;cursor:pointer;padding:4px 0 12px">Show more</button>` : ''}
+          <button class="follow-btn ${isFollowing ? 'following' : 'not-following'}" id="author-follow-btn" onclick="toggleFollowAuthor('${authorKey}', '${escHtml(name)}')">
+            ${isFollowing ? '✓ Following' : '+ Follow'}
+          </button>
+        </div>
+      </div>
+      <div class="book-section-title" style="margin-top:8px">Books by ${escHtml(name)}</div>
+      <div class="books-grid-cards">${booksGridHTML}</div>`;
+  } catch(e) {
+    content.innerHTML = `<div class="empty-state"><span class="e-icon">⚠️</span>Couldn't load this author.<br><button class="back-btn" onclick="navigateBack()" style="margin-top:12px">Go back</button></div>`;
+  }
+}
+
+function toggleAuthorBio() {
+  const el = document.getElementById('author-bio-text');
+  const btn = document.getElementById('author-bio-btn');
+  if (!el) return;
+  el.classList.toggle('clamped');
+  btn.textContent = el.classList.contains('clamped') ? 'Show more' : 'Show less';
+}
+
+async function toggleFollowAuthor(authorKey, authorName) {
+  if (!CURRENT_USER) { toast('Sign in to follow authors'); return; }
+  const btn = document.getElementById('author-follow-btn');
+  const authorId = 'author_' + authorKey;
+  const { data: existing } = await sb.from('friendships')
+    .select('id').eq('requester_id', CURRENT_USER.id).eq('addressee_id', authorId).maybeSingle();
+  if (existing) {
+    await sb.from('friendships').delete().eq('id', existing.id);
+    btn.className = 'follow-btn not-following';
+    btn.textContent = '+ Follow';
+    toast('Unfollowed ' + authorName);
+  } else {
+    await sb.from('friendships').insert({ requester_id: CURRENT_USER.id, addressee_id: authorId, status: 'accepted' });
+    btn.className = 'follow-btn following';
+    btn.textContent = '✓ Following';
+    toast('Following ' + authorName + ' ✓');
+  }
+}
+
+// ── Init route on app load ────────────────────────────────
+const _origInitApp = typeof initApp === 'function' ? initApp : null;
+function initAppWithRouting() {
+  if (_origInitApp) _origInitApp();
+  const route = getRoute();
+  if (route.page !== 'library') handleRoute(route);
+}
+
+// Override initApp call
+if (typeof initApp !== 'undefined') {
+  const _ia = initApp;
+  // Will be called by showApp() which we patched
+}
+
+
+// ── Start with routing ──
+window.addEventListener("load", () => { const r = getRoute(); if(r.page !== "library") setTimeout(()=>handleRoute(r), 800); });
 </script>
 </body>
 </html>
